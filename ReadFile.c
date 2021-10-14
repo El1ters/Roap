@@ -1,8 +1,33 @@
+/******************************************************************************
+ * NOME
+ *   ReadFile.c
+ *
+ * DESCRICAO
+ *   Implementa funcoes para...
+ *
+ * COMENTARIOS
+ *   ....
+ ******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include "ReadFile.h"
 #include "SolveTab.h"
 
+/******************************************************************************
+ * ReadFile ()
+ *
+ * Argumentos: **argv - ...
+ *             
+ * Retorna: (void)
+ * Efeitos colaterais: ...
+ *
+ * Descricao: ...
+ *              
+ *              
+ *              
+ *              
+ * 
+ *****************************************************************************/
 void ReadFile(char **argv){
     FILE *fp,*fp1;
     int **tabuleiro = NULL;
@@ -63,6 +88,21 @@ void ReadFile(char **argv){
     }
 }
 
+/******************************************************************************
+ * **Allocate ()
+ *
+ * Argumentos: lines   - ...
+ *             columns - ...
+ * Retorna: tab - ...
+ * Efeitos colaterais: ...
+ *
+ * Descricao: ...
+ *              
+ *              
+ *              
+ *              
+ * 
+ *****************************************************************************/
 int **Allocate(int lines, int columns){
     int **tab;
     int i;
