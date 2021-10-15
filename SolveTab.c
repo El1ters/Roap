@@ -129,9 +129,63 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *dim,FILE *fp1){
         return;
     }
     if(strcmp(mode,"A5") == 0){
-        if(tabuleiro[def[0] - 1][def[1] - 1 == 0 || tabuleiro[def[0] - 1]][def[1] - 1] == -1){
+        if(tabuleiro[def[0] - 1][def[1] - 1] == 0 || tabuleiro[def[0] - 1][def[1] - 1] == -1){
             fprintf(fp1,"-1\n\n");
+            return;
+        }
+
+        if(((def[0] - 1 < 1) && (def[1] - 1 < 1)) ||
+           ((def[0] - 1 < 1) && (def[1] + 1 > dim[1]))||
+           ((def[0] + 1 > dim [0]) && (def[1] - 1 < 1)) ||
+           ((def[0] + 1 > dim[1]) && (def[0] + 1 > dim[0]))){
+               fprintf(fp1,"0\n\n");
+               return;
+           }
+
+        if(def[0] - 2 < 0){
+            if(tabuleiro[def[0]][def[1] - 1] == 0){
+                fprintf(fp1,"1\n\n");
+                return;
+            }
+        }
+
+        if(def[0] + 1 >= dim[0]){
+            if(tabuleiro[def[0] - 2][def[1] - 1] == 0){
+                fprintf(fp1,"1\n\n");
+                return;
+            }
+        }
+
+        if(def[0] - 2 >= 0 && def[0] + 1 <= dim[0]){
+            if(tabuleiro[def[0] - 2][def[1] - 1] == 0 && tabuleiro[def[0]][def[1] - 1] == 0){
+                fprintf(fp1,"1\n\n");
+                return;
+            }
+        }
+
+        if(def[1] - 2 < 0){
+            if(tabuleiro[def[0] - 1][def[1]] == 0){
+                printf("%d %d %d\n",tabuleiro[def[0] - 1][def[1]],def[0] - 1,def[1]);
+                fprintf(fp1,"1\n\n");
+                return;
+            }
+        }
+
+        if(def[1] + 1 >= dim[1]){
+            if(tabuleiro[def[0] - 1][def[1] - 2] == 0){
+                fprintf(fp1,"1\n\n");
+                return;
+            }
+        }
+        
+        if(def[1] - 2 >= 0 && def[1] + 1 <= dim[1]){
+            if(tabuleiro[def[0] - 1][def[1] - 2] == 0 && tabuleiro[def[0] - 1][def[1]] == 0){
+                fprintf(fp1,"1\n\n");
+                return;
+            }
         }
     }
+    fprintf(fp1,"0\n\n");
+    return;
 
 }
