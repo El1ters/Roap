@@ -9,6 +9,7 @@
  ******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "ReadFile.h"
 #include "SolveTab.h"
 
@@ -121,4 +122,15 @@ int **Allocate(int lines, int columns){
             }
     }
     return tab;    
+}
+
+char *getfile(char *argv[]){
+    char *a = argv[1], *b = NULL;
+    int k = 0;
+    b = (char*)calloc(sizeof(char),strlen(argv[1]) + 1);
+    for(a = argv[1]; *a != '\0'; a++, k++);
+    for(a--; *a != '.';a--,k--);
+    a = argv[1];
+    strncpy(b,a,k-1);
+    return b;
 }
