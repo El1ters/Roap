@@ -3,10 +3,9 @@
  *   ReadFile.c
  *
  * DESCRICAO
- *   Implementa funcoes para...
- *
- * COMENTARIOS
- *   ....
+ *   Implementa funcoes que irao permitir ler os ficheiros de entrada fornecidos,
+ *   alocando espaço necessario para os guardar.
+ *   
  ******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
@@ -16,34 +15,41 @@
 /******************************************************************************
  * ReadFile ()
  *
- * Argumentos: **argv - ...
+ * Argumentos: argv - ponteiro que aponta para um vetor de strings que contém os argumentos do terminal.
  *             
  * Retorna: (void)
- * Efeitos colaterais: ...
  *
- * Descricao: ...
+ * Descricao: Esta funçao vai ler os dados do ficheiro de entrada escolhido.
  *              
- *              
- *              
- *              
- * 
  *****************************************************************************/
 void ReadFile(char **argv){
-    FILE *fp,*fp1;
-    int **tabuleiro = NULL;
-    int flag = 1, number_of_lines = 100, count = 0, dim[2],def[2],linha,coluna,cell;
-    char mode[3];  
+    FILE *fp,*fp1; /* Ficheiro de entrada e de saida, respetivamente */
+    int **tabuleiro = NULL; /* Vetor bidimensional que vai guardar os dados do fiheiro de entrada */
+    int flag = 1; /* Variavel auxiliar que permite saber que linha do ficheiro de entrada estamos a ler */ 
+    int number_of_lines = 100; /* Variavel auxiliar que contem o numero de celulas */
+    int count = 0; /* Variavel auxiliar que conta o numero de coordenadas lidas */
+    int dim[2]; /* Vetor que guarda as dimensoes do labirinto */
+    int def[2]; /* Vetor que guarda as coordenadas da celula da 2ª linha do ficheiro de entrada */
+    int linha; /* Numero de linhas dos labirintos */
+    int coluna; /* Numero de colunas dos labirintos */
+    int cell; /* Variavel auxiliar que vai guardar as celulas dos labirintos */
+    char mode[3]; /* Vetor que guarda o modo das variantes de funcionamento */
 
+    /* Condicao de erro para o ficheiro de entrada */
     if((fp = fopen(argv[1],"r")) == NULL){
         printf("could not open the file");
         exit(EXIT_FAILURE);
     }
 
+    /* Condicao de erro para o ficheiro de saida */
     if((fp1 = fopen("teste.sol","w")) == NULL){
         printf("could not open the file");
         exit(EXIT_FAILURE);
     }
 
+    /* Leitura do ficheiro de entrada -> os cases permitem ler as 3 primeiras linhas do ficheiro;
+                                      -> o default permite ler as restantes. 
+    */
     while(!feof(fp)){
         switch (flag){
             case 0:
@@ -91,20 +97,16 @@ void ReadFile(char **argv){
 /******************************************************************************
  * **Allocate ()
  *
- * Argumentos: lines   - ...
- *             columns - ...
- * Retorna: tab - ...
- * Efeitos colaterais: ...
- *
- * Descricao: ...
- *              
- *              
- *              
- *              
+ * Argumentos: lines   - numero de linhas dos labirintos.
+ *             columns - numero de colunas dos labirirntos.
  * 
+ * Retorna: tab - o labirinto com as dimensoes pedidas e com as celulas nas coordenadas certas.
+ *
+ * Descricao: esta funcao permite alocar o espaco necessario para gerar os labirintos.
+ *              
  *****************************************************************************/
 int **Allocate(int lines, int columns){
-    int **tab;
+    int **tab; 
     int i;
     tab = (int**)calloc(lines,sizeof(int*));
     if( tab == NULL){

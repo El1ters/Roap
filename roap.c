@@ -3,10 +3,9 @@
  *   roap.c
  *
  * DESCRICAO
- *   Implementa funcoes para...
+ *   Contem as funcoes que permitem a resolucao do problema pedido (ler dados do ficheiro de entrada e de
+ *   acordo com as diferentes formas de funcionamento escrever a solucao num ficheiro de saida).
  *
- * COMENTARIOS
- *   ....
  ******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,39 +15,14 @@
 /******************************************************************************
  * main ()
  *
- * Argumentos: argc   - ...
- *             **argv - ...
+ * Argumentos: argc - contador do numero de argumentos inseridos no terminal.
+ *             argv - ponteiro que aponta para um vetor de strings que contém os argumentos do terminal. 
  * Retorna: 0
- * Efeitos colaterais: nenhum
- *
- * Descricao: ...
  *              
- *              
- *              
- *              
- * 
  *****************************************************************************/
 int main(int argc,char **argv){
-    SetCoordinates(argv);
+    ReadFile(argv);
     return 0;
 }
 
 
-/******************************************************************************
- * SetCoordinates ()
- *
- * Argumentos: **argv - ...
- *             
- * Retorna: (void)
- * Efeitos colaterais: ...
- *
- * Descricao: ...
- *              
- *              
- *              
- *              
- * 
- *****************************************************************************/
-void SetCoordinates(char **argv){
-    ReadFile(argv);
-}

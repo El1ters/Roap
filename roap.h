@@ -15,10 +15,9 @@
 /******************************************************************************
  * SetCoordinates ()
  *
- * Argumentos: **argv - ...
+ * Argumentos: argv - ponteiro que aponta para um vetor de strings que contém os argumentos do terminal.
  *             
  * Retorna: (void)
- * Efeitos colaterais: ...
  *
  * Descricao: ...
  *              
