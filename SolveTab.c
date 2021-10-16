@@ -164,6 +164,13 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *dim,FILE *fp1){
             return;
         }
 
+        if((def[0] - 2 < 0 && def[1] - 2 < 0)||
+           (def[0] - 2 < 0 && def[1] + 1 > dim[1])||
+           (def[0] + 1 > dim[0] && def[1] - 2 < 0)||
+           (def[0] + 1 > dim[0] && def[1] + 1 > dim[1])){
+               fprintf(fp1,"0\n\n");
+               return;
+        }
         /* Verifica se a celula a direita da celula em causa esta no labirinto e é branca, se sim 
         entao a celula cinzenta e quebravel porque pode haver continuicao do caminho */
         if(def[0] - 2 < 0){
@@ -175,7 +182,7 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *dim,FILE *fp1){
 
         /* Verifica se a celula a esquerda da celula em causa esta no labirinto e é branca, se sim 
         entao a celula cinzenta e quebravel porque pode haver continuicao do caminho */
-        if(def[0] > dim[0]){
+        if(def[0] + 1 > dim[0]){
             if(tabuleiro[def[0] - 2][def[1] - 1] == 0){
                 fprintf(fp1,"1\n\n");
                 return;
@@ -185,7 +192,6 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *dim,FILE *fp1){
         /* Verifica se a celula a esquerda da celula em causa esta no labirinto e é branca, se sim 
         entao a celula cinzenta e quebravel porque pode haver continuicao do caminho */
         if(def[0] - 2 >= 0 && def[0] < dim[0]){
-            printf("def[0]-2:%d def[1]-1:%d def[0]:%d\n",def[0] - 2,def[1] - 1,def[0]);
             if(tabuleiro[def[0] - 2][def[1] - 1] == 0 && tabuleiro[def[0]][def[1] - 1] == 0){
                 fprintf(fp1,"1\n\n");
                 return;
@@ -199,7 +205,7 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *dim,FILE *fp1){
             }
         }
 
-        if(def[1] > dim[1]){
+        if(def[1] + 1 > dim[1]){
             if(tabuleiro[def[0] - 1][def[1] - 2] == 0){
                 fprintf(fp1,"1\n\n");
                 return;
@@ -212,6 +218,9 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *dim,FILE *fp1){
                 return;
             }
         }
+
+        fprintf(fp1,"0\n\n");
+        return;
     }
 
 }

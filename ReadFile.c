@@ -41,7 +41,6 @@ void ReadFile(char **argv){
         printf("could not open the file");
         exit(EXIT_FAILURE);
     }
-
     /* Condicao de erro para o ficheiro de saida */
     if((fp1 = fopen("teste.sol","w")) == NULL){
         printf("could not open the file");
@@ -127,10 +126,9 @@ int **Allocate(int lines, int columns){
 char *getfile(char *argv[]){
     char *a = argv[1], *b = NULL;
     int k = 0;
-    b = (char*)calloc(sizeof(char),strlen(argv[1]) + 1);
+    b = (char*)calloc(sizeof(char),strlen(argv[1]));
     for(a = argv[1]; *a != '\0'; a++, k++);
     for(a--; *a != '.';a--,k--);
-    a = argv[1];
-    strncpy(b,a,k-1);
+    strncpy(b,argv[1],k-1);
     return b;
 }
