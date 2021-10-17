@@ -13,7 +13,6 @@
 #include "ReadFile.h"
 #include "SolveTab.h"
 
-
 /******************************************************************************
  * ReadFile ()
  *
@@ -26,7 +25,6 @@
  *              
  *****************************************************************************/
 void ReadFile(char **argv){
-
     FILE *fp,*fp1; /* Ficheiros de entrada e de saida, respetivamente. */
     int **tabuleiro = NULL; /* Vetor bidimensional que vai guardar os dados do fiheiro de entrada. */
     int flag = 1; /* Variavel auxiliar que permite saber que linha do ficheiro de entrada estamos a ler. */ 
@@ -38,6 +36,7 @@ void ReadFile(char **argv){
     int coluna; /* Numero de colunas dos labirintos. */
     int cell; /* Variavel auxiliar que vai guardar as celulas dos labirintos. */
     char mode[3]; /* Vetor que guarda o modo das variantes de funcionamento. */
+    int sec[2] = {0,0};
 
     /* 
     Filename fica a apontar para a posicao de memoria que contem o nome do ficheiro de saida
@@ -45,7 +44,7 @@ void ReadFile(char **argv){
     char *filename = getfilename(argv); 
 
     /*
-    Acrescenta ao ficheiro de saida o ".sol1". */
+    Acrescenta ao ficheiro de saida o "".sol1". */
     strcat(filename,".sol1");
 
     /* 
@@ -77,8 +76,16 @@ void ReadFile(char **argv){
                 }
                 break;
             case 2:
-                if(fscanf(fp,"%d %d %s",&def[0],&def[1],mode) != 3)
+                if(fscanf(fp,"%d %d %s",&def[0],&def[1],mode) != 3){
                     return;
+                }
+                    if(strcmp(mode,"A6") == 0){
+                        if(fscanf(fp,"%d %d",&sec[0],&sec[1]) != 2){
+                            return;
+                        }
+                    }
+
+                    
                 break;
             case 3:
                 if(fscanf(fp,"%d",&number_of_lines) != 1)
@@ -93,7 +100,7 @@ void ReadFile(char **argv){
         }
         if(count == number_of_lines){
             flag = 0;
-            SolveTab(tabuleiro,mode,def,dim,fp1);
+            SolveTab(tabuleiro,mode,def,sec,dim,fp1);
             for(int k = 0;k < linha;k++){
                 free(tabuleiro[k]);
             } 
@@ -107,31 +114,12 @@ void ReadFile(char **argv){
         }  
     }
 }
-
-
-/******************************************************************************
- * outside ()
- *
- * Argumentos: L   -> numero de linhas dos labirintos.
- *             C   -> numero de colunas dos labirirntos.
- *             dim -> ponteiro que aponta para uma posicao de memoria que
- *                    guarda as dimensoes do tabuleiro.
- * 
- * Retorna: 1 -> se a celula estiver fora do tabuleiro.
- *          0 -> se a celula estiver dentro do tabuleiro.
- *
- * Descricao: Esta funcao permite saber se uma dada celula esta dentro ou fora 
- *            do labirinto.
- *              
- *****************************************************************************/
-int outside(int L, int C, int *dim){
+int outside(int L,int C,int *dim){
     if((L <= 0 || L > dim[0]) || (C <= 0 || C > dim[1])){
         return 1;
     }
     return 0;
 }
-
-
 /******************************************************************************
  * **Allocate ()
  *
