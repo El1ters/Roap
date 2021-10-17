@@ -10,8 +10,6 @@
  ******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
-
-
 #include "roap.h"
 #include "ReadFile.h"
 
@@ -26,6 +24,8 @@
  *              
  *****************************************************************************/
 int main(int argc,char **argv){
-    ReadFile(argv);
+    if(strcmp(*argv[1],"-s") == 0){
+        ReadFile(argv);
+    }
     return 0;
 }

@@ -48,7 +48,7 @@ void ReadFile(char **argv){
 
     /* 
     Condicao de erro para o ficheiro de entrada. */
-    if((fp = fopen(argv[1],"r")) == NULL){
+    if((fp = fopen(argv[2],"r")) == NULL){
         printf("could not open the file");
         exit(EXIT_FAILURE);
     }
@@ -158,13 +158,13 @@ int **Allocate(int lines, int columns){
  *****************************************************************************/
 char *getfilename(char *argv[]){
 
-    char *a = argv[1];
+    char *a = argv[2];
     char *b = NULL;
     int k = 0;
 
-    for(a = argv[1]; *a != '\0'; a++, k++);
+    for(a = argv[2]; *a != '\0'; a++, k++);
     b = (char*)calloc(sizeof(char), k + 2);
     for(a--; *a != '.';a--,k--);
-    strncpy(b,argv[1],k-1);
+    strncpy(b,argv[2],k-1);
     return b;
 }
