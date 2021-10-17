@@ -9,6 +9,9 @@
 #ifndef SOLVETAB
 #define SOLVETAB
 
+#include "ReadFile.h"
+#include <stdio.h>
+
 void SolveTab(int **tabuleiro,char *mode,int *def,int *dim,FILE *fp1);
 
 #endif
