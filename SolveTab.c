@@ -52,8 +52,12 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *dim,FILE *fp1){
     /* 
     Condicao que permite resolver a variante de funcionamento A2. */
     if(strcmp(mode,"A2") == 0){
+
+        /*
+        Conjunto de condicoes que permite verificar se as celulas adjantes a celula em causa
+        (celula a esquerda, direita, baixo e acima) estao dentro do labirinto e se sao brancas. */
         if((outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] == 0)||
-           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == 0) ||
+           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == 0)    ||
            (outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] == 0)||
            (outside(def[0],def[1] + 1, dim) == 0 && tabuleiro[def[0] - 1][def[1]] == 0)){
                 fprintf(fp1,"1\n\n");
@@ -66,8 +70,12 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *dim,FILE *fp1){
     /* 
     Condicao que permite resolver a variante de funcionamento A3. */
     if(strcmp(mode,"A3") == 0){
+
+        /*
+        Conjunto de condicoes que permite verificar se as celulas adjantes a celula em causa
+        (celula a esquerda, direita, baixo e acima) estao dentro do labirinto e se sao cinzentas. */
         if((outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] > 0)||
-           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] > 0) ||
+           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] > 0)    ||
            (outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] > 0)||
            (outside(def[0],def[1] + 1, dim) == 0 && tabuleiro[def[0] - 1][def[1]] > 0)){
                 fprintf(fp1,"1\n\n");
@@ -80,8 +88,12 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *dim,FILE *fp1){
     /* 
     Condicao que permite resolver a variante de funcionamento A4. */
     if(strcmp(mode,"A4") == 0){
+
+        /*
+        Conjunto de condicoes que permite verificar se as celulas adjantes a celula em causa
+        (celula a esquerda, direita, baixo e acima) estao dentro do labirinto e se sao pretas. */
         if((outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] == -1)||
-           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == -1) ||
+           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == -1)    ||
            (outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] == -1)||
            (outside(def[0],def[1] + 1, dim) == 0 && tabuleiro[def[0] - 1][def[1]] == -1)){
                 fprintf(fp1,"1\n\n");

@@ -13,6 +13,7 @@
 #include "ReadFile.h"
 #include "SolveTab.h"
 
+
 /******************************************************************************
  * ReadFile ()
  *
@@ -25,6 +26,7 @@
  *              
  *****************************************************************************/
 void ReadFile(char **argv){
+
     FILE *fp,*fp1; /* Ficheiros de entrada e de saida, respetivamente. */
     int **tabuleiro = NULL; /* Vetor bidimensional que vai guardar os dados do fiheiro de entrada. */
     int flag = 1; /* Variavel auxiliar que permite saber que linha do ficheiro de entrada estamos a ler. */ 
@@ -43,7 +45,7 @@ void ReadFile(char **argv){
     char *filename = getfilename(argv); 
 
     /*
-    Acrescenta ao ficheiro de saida o "".sol1". */
+    Acrescenta ao ficheiro de saida o ".sol1". */
     strcat(filename,".sol1");
 
     /* 
@@ -105,12 +107,31 @@ void ReadFile(char **argv){
         }  
     }
 }
-int outside(int L,int C,int *dim){
+
+
+/******************************************************************************
+ * outside ()
+ *
+ * Argumentos: L   -> numero de linhas dos labirintos.
+ *             C   -> numero de colunas dos labirirntos.
+ *             dim -> ponteiro que aponta para uma posicao de memoria que
+ *                    guarda as dimensoes do tabuleiro.
+ * 
+ * Retorna: 1 -> se a celula estiver fora do tabuleiro.
+ *          0 -> se a celula estiver dentro do tabuleiro.
+ *
+ * Descricao: Esta funcao permite saber se uma dada celula esta dentro ou fora 
+ *            do labirinto.
+ *              
+ *****************************************************************************/
+int outside(int L, int C, int *dim){
     if((L <= 0 || L > dim[0]) || (C <= 0 || C > dim[1])){
         return 1;
     }
     return 0;
 }
+
+
 /******************************************************************************
  * **Allocate ()
  *
