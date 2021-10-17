@@ -11,6 +11,7 @@
 
 void ReadFile();
 int **Allocate(int lines, int columns);
-char *getfile(char *argv[]);
+char *getfilename(char *argv[]);
+int outside(int L,int C,int *dim);
 
 #endif

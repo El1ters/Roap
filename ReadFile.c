@@ -49,14 +49,12 @@ void ReadFile(char **argv){
     /* 
     Condicao de erro para o ficheiro de entrada. */
     if((fp = fopen(argv[2],"r")) == NULL){
-        printf("could not open the file");
-        exit(EXIT_FAILURE);
+        exit(0);
     }
     /* 
     Condicao de erro para o ficheiro de saida. */
-    if((fp1 = fopen("teste.sol","w")) == NULL){
-        printf("could not open the file");
-        exit(EXIT_FAILURE);
+    if((fp1 = fopen(filename,"w")) == NULL){
+        exit(0);
     }
 
     /* 
@@ -70,6 +68,7 @@ void ReadFile(char **argv){
                 if(fscanf(fp,"%d %d",&dim[0],&dim[1]) != 2){
                     fclose(fp);
                     fclose(fp1);
+                    free(filename);
                     return;
                 }else{
                     tabuleiro = Allocate(dim[0],dim[1]);
@@ -86,6 +85,7 @@ void ReadFile(char **argv){
             default:
                 if(fscanf(fp,"%d %d %d",&linha,&coluna,&cell) != 3)
                     return;
+
                 tabuleiro[linha - 1][coluna - 1] = cell;
                 break;
         }
@@ -105,7 +105,12 @@ void ReadFile(char **argv){
         }  
     }
 }
-
+int outside(int L,int C,int *dim){
+    if((L <= 0 || L > dim[0]) || (C <= 0 || C > dim[1])){
+        return 1;
+    }
+    return 0;
+}
 /******************************************************************************
  * **Allocate ()
  *
@@ -126,14 +131,12 @@ int **Allocate(int lines, int columns){
 
     tab = (int**)calloc(lines,sizeof(int*));
     if( tab == NULL){
-        printf("allocation not possible\n");/*substituir por fprintf*/
-        exit(EXIT_FAILURE);
+        exit(0);
     }
     for(i = 0; i < lines; i++){
         tab[i] = (int*)calloc(columns,sizeof(int));
             if(tab[i] == NULL){
-                printf("allocation not possible\n");/*substituir por fprintf*/
-                exit(EXIT_FAILURE); 
+                exit(0); 
             }
     }
     return tab;    
@@ -158,13 +161,13 @@ int **Allocate(int lines, int columns){
  *****************************************************************************/
 char *getfilename(char *argv[]){
 
-    char *a = argv[2];
+    char *a = NULL;
     char *b = NULL;
     int k = 0;
 
     for(a = argv[2]; *a != '\0'; a++, k++);
     b = (char*)calloc(sizeof(char), k + 2);
     for(a--; *a != '.';a--,k--);
-    strncpy(b,argv[2],k-1);
+    strncpy(b,argv[2],k - 1);
     return b;
 }

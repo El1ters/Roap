@@ -12,6 +12,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "SolveTab.h"
+#include "ReadFile.h"
+
 
 /******************************************************************************
  * SolveTab ()
@@ -35,9 +38,9 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *dim,FILE *fp1){
 
     /* 
     Condicao que verifica se as coordendas estao fora do labirinto, retornando -2 se sim. */
-    if((def[0] <= 0 || def[0] > dim[0]) || (def[1] <= 0 || def[1] > dim[1])){
-        fprintf(fp1,"-2\n\n");
-        return;
+    if(outside(def[0],def[1],dim) == 1){
+       fprintf(fp1,"-2\n\n");
+       return;
     }
 
     /* 
@@ -49,43 +52,13 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *dim,FILE *fp1){
     /* 
     Condicao que permite resolver a variante de funcionamento A2. */
     if(strcmp(mode,"A2") == 0){
-
-        /* 
-        Verifica se a celula acima da celula em causa esta no tabuleiro e se é branca. */
-        if(def[0] - 2 >= 0){
-            if(tabuleiro[def[0] - 2][def[1] - 1] == 0){
+        if((outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] == 0)||
+           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == 0) ||
+           (outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] == 0)||
+           (outside(def[0],def[1] + 1, dim) == 0 && tabuleiro[def[0] - 1][def[1]] == 0)){
                 fprintf(fp1,"1\n\n");
                 return;
             }
-        }
-
-        /* 
-        Verifica se a celula abaixo da celula em causa esta no tabuleiro e se é branca. */
-        if(def[0] <= dim[0]){
-            if(tabuleiro[def[0]][def[1] - 1] == 0){
-                fprintf(fp1,"1\n\n");
-                return;
-            }
-        }
-
-        /* 
-        Verifica se a celula a esquerda da celula em causa esta no tabuleiro e se é branca. */
-        if(def[1] - 2 >= 0){
-            if(tabuleiro[def[0] - 1][def[1] - 2] == 0){
-                fprintf(fp1,"1\n\n");
-                return;
-            }
-        }
-
-        /* 
-        Verifica se a celula a direita da celula em causa esta no tabuleiro e se é branca. */
-        if(def[1] <= dim[1]){
-            if(tabuleiro[def[0] - 1][def[1]] == 0){
-                fprintf(fp1,"1\n\n");
-                return;
-            }  
-        }
-            
         fprintf(fp1,"0\n\n");
         return;
     }
@@ -93,85 +66,27 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *dim,FILE *fp1){
     /* 
     Condicao que permite resolver a variante de funcionamento A3. */
     if(strcmp(mode,"A3") == 0){
-
-        /* 
-        Verifica se a celula acima da celula em causa esta no tabuleiro e se é cinzenta. */
-         if(def[0] - 2 >= 0){
-            if(tabuleiro[def[0] - 2][def[1] - 1] > 0){
+        if((outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] > 0)||
+           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] > 0) ||
+           (outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] > 0)||
+           (outside(def[0],def[1] + 1, dim) == 0 && tabuleiro[def[0] - 1][def[1]] > 0)){
                 fprintf(fp1,"1\n\n");
                 return;
             }
-        }
-
-        /* 
-        Verifica se a celula abaixo da celula em causa esta no tabuleiro e se é cinzenta. */
-        if(def[0] < dim[0]){
-            if(tabuleiro[def[0]][def[1] - 1] > 0){
-                fprintf(fp1,"1\n\n");
-                return;
-            }
-        }
-
-        /* 
-        Verifica se a celula a esquerda da celula em causa esta no tabuleiro e se é cinzenta. */
-        if(def[1] - 2 >= 0){
-            if(tabuleiro[def[0] - 1][def[1] - 2] > 0){
-                fprintf(fp1,"1\n\n");
-                return;
-            }
-        }
-
-        /* 
-        Verifica se a celula a direita da celula em causa esta no tabuleiro e se é cinzenta. */
-        if(def[1] < dim[1]){
-            if(tabuleiro[def[0] - 1][def[1]] > 0){
-                fprintf(fp1,"1\n\n");
-                return;
-            }  
-        }
         fprintf(fp1,"0\n\n");
-        return;
+        return;            
     }
 
     /* 
     Condicao que permite resolver a variante de funcionamento A4. */
     if(strcmp(mode,"A4") == 0){
-
-        /* 
-        Verifica se a celula acima da celula em causa esta no tabuleiro e se é preta. */
-         if(def[0] - 2 >= 0){
-            if(tabuleiro[def[0] - 2][def[1] - 1] == -1){
+        if((outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] == -1)||
+           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == -1) ||
+           (outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] == -1)||
+           (outside(def[0],def[1] + 1, dim) == 0 && tabuleiro[def[0] - 1][def[1]] == -1)){
                 fprintf(fp1,"1\n\n");
                 return;
             }
-        }
-
-        /* 
-        Verifica se a celula abaixo da celula em causa esta no tabuleiro e se é preta. */
-        if(def[0] < dim[0]){
-            if(tabuleiro[def[0]][def[1] - 1] == -1){
-                fprintf(fp1,"1\n\n");
-                return;
-            }
-        }
-
-        /* 
-        Verifica se a celula a esquerda da celula em causa esta no tabuleiro e se é preta. */
-        if(def[1] - 2 >= 0){
-            if(tabuleiro[def[0] - 1][def[1] - 2] == -1){
-                fprintf(fp1,"1\n\n");
-                return;
-            }
-        }
-
-        /* 
-        Verifica se a celula a direita da celula em causa esta no tabuleiro e se é preta. */
-        if(def[1] < dim[1]){
-            if(tabuleiro[def[0] - 1][def[1]] == -1){
-                fprintf(fp1,"1\n\n");
-                return;
-            }  
-        }
         fprintf(fp1,"0\n\n");
         return;
     }
