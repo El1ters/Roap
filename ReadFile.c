@@ -38,7 +38,9 @@ void ReadFile(char **argv){
     int coluna; /* Numero de colunas dos labirintos. */
     int cell; /* Variavel auxiliar que vai guardar as celulas dos labirintos. */
     char mode[3]; /* Vetor que guarda o modo das variantes de funcionamento. */
-    char *filename;
+
+    char *filename = getfilename(argv);
+    strcat(filename,".sol1");
 
     /* 
     Condicao de erro para o ficheiro de entrada. */
@@ -46,9 +48,6 @@ void ReadFile(char **argv){
         printf("could not open the file");
         exit(EXIT_FAILURE);
     }
-
-    filename = getfilename(argv);
-    strcat(filename,".sol1");
 
     /* 
     Condicao de erro para o ficheiro de saida. */
