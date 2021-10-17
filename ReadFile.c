@@ -10,8 +10,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-
 #include "ReadFile.h"
 #include "SolveTab.h"
 
@@ -39,7 +37,13 @@ void ReadFile(char **argv){
     int cell; /* Variavel auxiliar que vai guardar as celulas dos labirintos. */
     char mode[3]; /* Vetor que guarda o modo das variantes de funcionamento. */
 
-    char *filename = getfilename(argv);
+    /* 
+    Filename fica a apontar para a posicao de memoria que contem o nome do ficheiro de saida
+    atraves da chamada a funcao getfilename. */
+    char *filename = getfilename(argv); 
+
+    /*
+    Acrescenta ao ficheiro de saida o "".sol1". */
     strcat(filename,".sol1");
 
     /* 
@@ -48,10 +52,9 @@ void ReadFile(char **argv){
         printf("could not open the file");
         exit(EXIT_FAILURE);
     }
-
     /* 
     Condicao de erro para o ficheiro de saida. */
-    if((fp1 = fopen(filename,"w")) == NULL){
+    if((fp1 = fopen("teste.sol","w")) == NULL){
         printf("could not open the file");
         exit(EXIT_FAILURE);
     }
@@ -67,7 +70,6 @@ void ReadFile(char **argv){
                 if(fscanf(fp,"%d %d",&dim[0],&dim[1]) != 2){
                     fclose(fp);
                     fclose(fp1);
-                    free(filename);
                     return;
                 }else{
                     tabuleiro = Allocate(dim[0],dim[1]);
@@ -139,14 +141,19 @@ int **Allocate(int lines, int columns){
 
 
 /******************************************************************************
- * *getfile ()
+ * *getfilename ()
  *
  * Argumentos: argv -> ponteiro que aponta para um vetor de strings que contém
  *                     os argumentos do terminal.
  * 
- * Retorna: b -> 
+ * Retorna: b -> b vai apontar para uma posicao de memoria onde se encontra a
+ *               string correspondente ao nome que vai ser atribuido ao ficheiro
+ *               de saida (que vai ser igual ao do ficheiro de entrada).  
  *
- * Descricao: 
+ * Descricao: Esta funcao permite que o ficheiro de saida tenha o mesmo nome
+ *            que o ficheiro de entrada, mudando apenas a diretoria final
+ *            (passa por exemplo de .in1 para .sol1 sendo que o que está
+ *            a esquerda do ponto final e igual nos dois ficheiros). 
  *              
  *****************************************************************************/
 char *getfilename(char *argv[]){
