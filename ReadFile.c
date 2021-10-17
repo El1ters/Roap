@@ -36,7 +36,8 @@ void ReadFile(char **argv){
     int coluna; /* Numero de colunas dos labirintos. */
     int cell; /* Variavel auxiliar que vai guardar as celulas dos labirintos. */
     char mode[3]; /* Vetor que guarda o modo das variantes de funcionamento. */
-    int sec[2] = {0,0};
+    int sec[2] = {0,0}; /* Inicializacao de um vetor que ira conter as coordendas do ponto de chegada 
+                           do labirinto para a variedade de funcionamento A6. */
 
     /* 
     Filename fica a apontar para a posicao de memoria que contem o nome do ficheiro de saida
@@ -100,7 +101,7 @@ void ReadFile(char **argv){
         }
         if(count == number_of_lines){
             flag = 0;
-            SolveTab(tabuleiro,mode,def,sec,dim,fp1);
+            SolveTab(tabuleiro, mode, def, sec, dim, fp1);
             for(int k = 0;k < linha;k++){
                 free(tabuleiro[k]);
             } 
