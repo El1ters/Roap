@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+
 #include "ReadFile.h"
 #include "SolveTab.h"
 
@@ -36,6 +38,7 @@ void ReadFile(char **argv){
     int coluna; /* Numero de colunas dos labirintos. */
     int cell; /* Variavel auxiliar que vai guardar as celulas dos labirintos. */
     char mode[3]; /* Vetor que guarda o modo das variantes de funcionamento. */
+    char *filename;
 
     /* 
     Condicao de erro para o ficheiro de entrada. */
@@ -43,9 +46,13 @@ void ReadFile(char **argv){
         printf("could not open the file");
         exit(EXIT_FAILURE);
     }
+
+    filename = getfilename(argv);
+    strcat(filename,".sol1");
+
     /* 
     Condicao de erro para o ficheiro de saida. */
-    if((fp1 = fopen("teste.sol","w")) == NULL){
+    if((fp1 = fopen(filename,"w")) == NULL){
         printf("could not open the file");
         exit(EXIT_FAILURE);
     }
@@ -61,6 +68,7 @@ void ReadFile(char **argv){
                 if(fscanf(fp,"%d %d",&dim[0],&dim[1]) != 2){
                     fclose(fp);
                     fclose(fp1);
+                    free(filename);
                     return;
                 }else{
                     tabuleiro = Allocate(dim[0],dim[1]);
@@ -142,14 +150,14 @@ int **Allocate(int lines, int columns){
  * Descricao: 
  *              
  *****************************************************************************/
-char *getfile(char *argv[]){
+char *getfilename(char *argv[]){
 
     char *a = argv[1];
     char *b = NULL;
     int k = 0;
 
-    b = (char*)calloc(sizeof(char),strlen(argv[1]));
     for(a = argv[1]; *a != '\0'; a++, k++);
+    b = (char*)calloc(sizeof(char), k + 2);
     for(a--; *a != '.';a--,k--);
     strncpy(b,argv[1],k-1);
     return b;

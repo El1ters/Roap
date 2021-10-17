@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "SolveTab.h"
+
 
 /******************************************************************************
  * SolveTab ()
