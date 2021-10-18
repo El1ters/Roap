@@ -85,7 +85,7 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
                 return;
             }
         fprintf(fp1,"0\n\n");
-        return;
+        return;            
     }
 
     /* 
@@ -113,10 +113,10 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
         /*Verifica, para as celulas encostadas ao lado direito,em cima, em baixo e esquerda do labirinto, se a celula
         a esquerda da celula em causa é branca, se sim entao a celula cinzenta e quebravel
         porque pode haver continuacao do caminho. */
-        if((outside(def[0] - 1,def[1],dim) == 1 && tabuleiro[def[0]][def[1] - 1] == 0)||
-           (outside(def[0] + 1,def[1],dim) == 1 && tabuleiro[def[0] - 2][def[1] - 1] == 0) ||
-           (outside(def[0],def[1] - 1,dim) == 1 && tabuleiro[def[0] - 1][def[1]] == 0)||
-           (outside(def[0],def[1] + 1, dim) == 1 && tabuleiro[def[0] - 1][def[1] - 2] == 0)){
+        if((outside(def[0] - 1,def[1],dim) == 1 && outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == 0)||
+           (outside(def[0] + 1,def[1],dim) == 1 && outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] == 0) ||
+           (outside(def[0],def[1] - 1,dim) == 1 && outside(def[0],def[1] + 1,dim) == 0 && tabuleiro[def[0] - 1][def[1]] == 0)||
+           (outside(def[0],def[1] + 1, dim) == 1 && outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] == 0)){
                 fprintf(fp1,"1\n\n");
                 return;
             }
