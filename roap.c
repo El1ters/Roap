@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <getopt.h>
 #include "ReadFile.h"
 #include "SolveTab.h"
 
@@ -25,6 +26,9 @@
  *              
  *****************************************************************************/
 int main(int argc,char **argv){
+    if(argc < 3){
+        return 0;
+    }
     if(strcmp(argv[1],"-s") == 0){
         ReadFile(argv);
     }
