@@ -36,8 +36,8 @@ void ReadFile(char **argv){
     int coluna; /* Numero de colunas dos labirintos. */
     int cell; /* Variavel auxiliar que vai guardar as celulas dos labirintos. */
     char mode[3]; /* Vetor que guarda o modo das variantes de funcionamento. */
-    int sec[2] = {0,0}; /* Inicializacao de um vetor que ira conter as coordendas do ponto de chegada 
-                           do labirinto para a variedade de funcionamento A6. */
+    int sec[2] = {0,0};/* Inicializacao de um vetor que ira conter as coordendas do ponto de chegada do labirinto para a variedade de funcionamento A6. */
+    int no_allocation = 0;
 
     /* 
     Filename fica a apontar para a posicao de memoria que contem o nome do ficheiro de saida
@@ -51,11 +51,12 @@ void ReadFile(char **argv){
     /* 
     Condicao de erro para o ficheiro de entrada. */
     if((fp = fopen(argv[2],"r")) == NULL){
+        free(filename);
         exit(0);
     }
     /* 
     Condicao de erro para o ficheiro de saida. */
-    if((fp1 = fopen(filename,"w")) == NULL){
+    if((fp1 = fopen(filename,"w")) == NULL){   
         exit(0);
     }
 
@@ -72,21 +73,31 @@ void ReadFile(char **argv){
                     fclose(fp1);
                     free(filename);
                     return;
-                }else{
-                    tabuleiro = Allocate(dim[0],dim[1]);
                 }
                 break;
             case 2:
                 if(fscanf(fp,"%d %d %s",&def[0],&def[1],mode) != 3){
                     return;
                 }
-                    if(strcmp(mode,"A6") == 0){
-                        if(fscanf(fp,"%d %d",&sec[0],&sec[1]) != 2){
-                            return;
-                        }
+                if(outside(def[0],def[1],dim) == 1){
+                    no_allocation = 1;
+                    fprintf(fp1,"-2\n\n");
+                }
+                if(strcmp(mode,"A6") == 0){
+                    if(fscanf(fp,"%d %d",&sec[0],&sec[1]) != 2){
+                        return;
                     }
-
-                    
+                    if(outside(sec[0],sec[1],dim) == 1){
+                        if(outside(def[0],def[1],dim) == 1){
+                            break;
+                        }
+                        no_allocation = 1;
+                        fprintf(fp1,"-2\n\n");
+                    }   
+                }
+                if(no_allocation == 0){
+                    tabuleiro = Allocate(dim[0],dim[1]);
+                } 
                 break;
             case 3:
                 if(fscanf(fp,"%d",&number_of_lines) != 1)
@@ -96,16 +107,21 @@ void ReadFile(char **argv){
                 if(fscanf(fp,"%d %d %d",&linha,&coluna,&cell) != 3)
                     return;
 
-                tabuleiro[linha - 1][coluna - 1] = cell;
+                if(no_allocation == 0){
+                    tabuleiro[linha - 1][coluna - 1] = cell;
+                }
                 break;
         }
         if(count == number_of_lines){
             flag = 0;
-            SolveTab(tabuleiro, mode, def, sec, dim, fp1);
-            for(int k = 0;k < linha;k++){
-                free(tabuleiro[k]);
-            } 
-                free(tabuleiro);
+            if(no_allocation == 0){
+                SolveTab(tabuleiro,mode,def,sec,dim,fp1);
+                for(int k = 0;k < dim[0];k++){
+                    free(tabuleiro[k]);
+                } 
+                    free(tabuleiro);
+            }
+            no_allocation = 0;
             count = 0;
         }else{
             flag++;
@@ -174,7 +190,9 @@ char *getfilename(char *argv[]){
     char *a = NULL;
     char *b = NULL;
     int k = 0;
-
+    if(argv[2] == NULL){
+        return NULL;
+    }
     for(a = argv[2]; *a != '\0'; a++, k++);
     b = (char*)calloc(sizeof(char), k + 2);
     for(a--; *a != '.';a--,k--);
