@@ -13,6 +13,7 @@
 #include "ReadFile.h"
 #include "SolveTab.h"
 
+
 /******************************************************************************
  * ReadFile ()
  *
@@ -36,7 +37,8 @@ void ReadFile(char **argv){
     int coluna; /* Numero de colunas dos labirintos. */
     int cell; /* Variavel auxiliar que vai guardar as celulas dos labirintos. */
     char mode[3]; /* Vetor que guarda o modo das variantes de funcionamento. */
-    int sec[2] = {0,0};/* Inicializacao de um vetor que ira conter as coordendas do ponto de chegada do labirinto para a variedade de funcionamento A6. */
+    int sec[2] = {0,0}; /* Inicializacao de um vetor que ira conter as coordendas do ponto de chegada 
+                           do labirinto para a variedade de funcionamento A6. */
     int no_allocation = 0,board_not_valide = 0;
 
     /* 
@@ -56,7 +58,7 @@ void ReadFile(char **argv){
     }
     /* 
     Condicao de erro para o ficheiro de saida. */
-    if((fp1 = fopen(filename,"w")) == NULL){   
+    if((fp1 = fopen(filename,"w")) == NULL){
         exit(0);
     }
 
@@ -134,17 +136,36 @@ void ReadFile(char **argv){
         }  
     }
 }
+
+
+/******************************************************************************
+ * outside ()
+ *
+ * Argumentos: L   -> numero de linhas dos labirintos.
+ *             C   -> numero de colunas dos labirirtos.
+ *             dim -> Ponteiro para a posicao de memoria onde esta a 
+ *                          dimensao dos labirintos.
+ * 
+ * Retorna: 1 -> se uma celula esta fora do labirinto.
+ *          0 -> se um celula esta dentro do labirinto.
+ *
+ * Descricao: Esta funcao permite saber se uma celula esta ou nao dentro do
+ *            labirinto.
+ *              
+ *****************************************************************************/
 int outside(int L,int C,int *dim){
     if((L <= 0 || L > dim[0]) || (C <= 0 || C > dim[1])){
         return 1;
     }
     return 0;
 }
+
+
 /******************************************************************************
  * **Allocate ()
  *
  * Argumentos: lines   -> numero de linhas dos labirintos.
- *             columns -> numero de colunas dos labirirntos.
+ *             columns -> numero de colunas dos labirintos.
  * 
  * Retorna: tab -> o labirinto com as dimensoes pedidas e com as celulas nas
  *                 coordenadas certas.
@@ -202,4 +223,3 @@ char *getfilename(char *argv[]){
     strncpy(b,argv[2],k - 1);
     return b;
 }
-

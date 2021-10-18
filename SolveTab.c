@@ -15,10 +15,14 @@
 #include "SolveTab.h"
 #include "ReadFile.h"
 
+
+/*
+Estrutura que guarda coordenadas de celulas do labirinto. */
 typedef struct Coord{
     int x;
     int y;
 }Coord;
+
 
 /******************************************************************************
  * SolveTab ()
@@ -49,8 +53,12 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
     /* 
     Condicao que permite resolver a variante de funcionamento A2. */
     if(strcmp(mode,"A2") == 0){
+
+        /* 
+        Conjunto de condicoes que verificam se as celulas adjacentes a celula em causa (celula a direita,
+        esquerda, baixo e acima) estao dentro do tabuleiro e se sao brancas. */
         if((outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] == 0)||
-           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == 0) ||
+           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == 0)    ||
            (outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] == 0)||
            (outside(def[0],def[1] + 1, dim) == 0 && tabuleiro[def[0] - 1][def[1]] == 0)){
                 fprintf(fp1,"1\n\n");
@@ -63,8 +71,12 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
     /* 
     Condicao que permite resolver a variante de funcionamento A3. */
     if(strcmp(mode,"A3") == 0){
+
+        /* 
+        Conjunto de condicoes que verificam se as celulas adjacentes a celula em causa (celula a direita,
+        esquerda, baixo e acima) estao dentro do tabuleiro e se sao cinzentas. */
         if((outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] > 0)||
-           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] > 0) ||
+           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] > 0)    ||
            (outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] > 0)||
            (outside(def[0],def[1] + 1, dim) == 0 && tabuleiro[def[0] - 1][def[1]] > 0)){
                 fprintf(fp1,"1\n\n");
@@ -77,15 +89,19 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
     /* 
     Condicao que permite resolver a variante de funcionamento A4. */
     if(strcmp(mode,"A4") == 0){
+
+        /* 
+        Conjunto de condicoes que verificam se as celulas adjacentes a celula em causa (celula a direita,
+        esquerda, baixo e acima) estao dentro do tabuleiro e se sao pretas. */
         if((outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] == -1)||
-           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == -1) ||
+           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == -1)    ||
            (outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] == -1)||
            (outside(def[0],def[1] + 1, dim) == 0 && tabuleiro[def[0] - 1][def[1]] == -1)){
                 fprintf(fp1,"1\n\n");
                 return;
             }
         fprintf(fp1,"0\n\n");
-        return;            
+        return;
     }
 
     /* 
@@ -110,13 +126,14 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
                return;
         }
         
-        /*Verifica, para as celulas encostadas ao lado direito,em cima, em baixo e esquerda do labirinto, se a celula
-        a esquerda da celula em causa é branca, se sim entao a celula cinzenta e quebravel
-        porque pode haver continuacao do caminho. */
-        if((outside(def[0] - 1,def[1],dim) == 1 && outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == 0)||
-           (outside(def[0] + 1,def[1],dim) == 1 && outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] == 0) ||
-           (outside(def[0],def[1] - 1,dim) == 1 && outside(def[0],def[1] + 1,dim) == 0 && tabuleiro[def[0] - 1][def[1]] == 0)||
-           (outside(def[0],def[1] + 1, dim) == 1 && outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] == 0)){
+        /*
+        Verifica, para as celulas encostadas ao lado direito, em cima, em baixo e esquerda do labirinto, 
+        se a celula a esquerda, em baixo, em cima e a direita, respetivamente da celula em causa sao brancas,
+        se sim entao a celula cinzenta e quebravel porque pode haver continuacao do caminho. */
+        if((outside(def[0] - 1,def[1],dim) == 1 && tabuleiro[def[0]][def[1] - 1] == 0)     ||
+           (outside(def[0] + 1,def[1],dim) == 1 && tabuleiro[def[0] - 2][def[1] - 1] == 0) ||
+           (outside(def[0],def[1] - 1,dim) == 1 && tabuleiro[def[0] - 1][def[1]] == 0)     ||
+           (outside(def[0],def[1] + 1, dim) == 1 && tabuleiro[def[0] - 1][def[1] - 2] == 0)){
                 fprintf(fp1,"1\n\n");
                 return;
             }
@@ -131,7 +148,7 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
                 return;
             }
         }
-
+                
         /* 
         Verifica, para as restantes celulas do labirinto, se as celulas a esquerda e a
         direita da celula em causa são brancas, se sim entao a celula cinzenta e quebravel
@@ -146,6 +163,7 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
         fprintf(fp1,"0\n\n");
         return;
     }
+
     /* 
     Condicao que permite resolver a variante de funcionamento A6. */
     if( strcmp(mode,"A6") == 0){
@@ -157,6 +175,7 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
 
 }
 
+
 /******************************************************************************
  * BFS ()
  *
@@ -166,7 +185,8 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
  *                          de chegada do labirinto. 
  *             tabuleiro -> Um ponteiro para um array de inteiros que contem o
  *                          labirinto.
- *             dim       -> Ponteiro para a dimensao dos labirintos.
+ *             dim       -> Ponteiro para a posicao de memoria onde esta a 
+ *                          dimensao dos labirintos.
  *           
  * Retorna: 1 -> se foi possivel encontrar uma ligacao entre o ponto de partida
  *               e o ponto de chegada.
@@ -175,28 +195,55 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
  *               pontos sao paredes.
  *
  * Descricao: Esta funcao permite dar resposta a variedade de funcionamento A6.
+ *            Esta funcao comeca por colocar num vetor de espera (chamado queue)
+ *            a celula correspondente ao ponto de partida do labirinto, verificando
+ *            se esta corresponde ou nao a celula do ponto de chegada do labirinto. 
+ *            De seguida, se o programa verificar que a celula da queue nao corresponde 
+ *            ao conjunto de chegada ira identificar todas as suas celulas adjacentes, 
+ *            colocando-as na lista de espera (queue) e movendo a celula em causa para 
+ *            um vetor que ira conter todas as celulas que ja foram visitadas.
+ *            O programa ira, portanto, executar sucessivamente estas operacoes 
+ *            (verificar celula a celula, colocando-as na queue, passando as ja 
+ *            verificadas para o vetor de espera, verificando as adjancentes da celula 
+ *            que esta em causa) ate chegar a celula correspondente ao ponto de chegada,
+ *            se este exisitir. 
  *     
  *****************************************************************************/
 int BFS(int *inicial,int *final,int **tabuleiro,int *dim){
-    Coord queue[dim[0] * dim[1]];
-    int q_size = 1;
-    int visited[dim[0]][dim[1]];
-    memset(visited,0,sizeof(visited));
-    Coord objective;
-    Coord current;
-    Coord start;
-    
-    start.x = inicial[0] - 1, start.y = inicial[1] - 1;
-    objective.x = final[0] - 1, objective.y = final[1] - 1;
 
-    if(tabuleiro[start.x][start.y] != 0 || tabuleiro[objective.x][objective.y] != 0){
+    Coord queue[dim[0] * dim[1]]; /* Inicializacao do vetor que correspondera a fila de espera. */
+    int q_size = 1; /* Inicializacao do tamanho da fila de espera -> inicialmente ira conter apenas a celula do ponto de partida. */
+    int visited[dim[0]][dim[1]]; /* Indicacao do tamanho do vetor que ira conter as celulas ja verificdas. */
+
+    /* 
+    Inicializacao do vetor que ira conter as celulas ja verificadas. */
+    for(int a = 0; a < dim[0];a++){
+        for(int b = 0; b < dim[1];b++){
+            visited[a][b] = 0;
+        }
+    }
+
+    Coord objective; /* Estrutura que vai guardar as coordendas da celula correspondente ao ponto de chegada do labirinto. */
+    Coord current; /* Estrutura que vai guardar as coordendas da celula que esta as ser verificada na queue. */
+    Coord start; /* Estrutura que vai guardar as coordendas da celula correspondente ao ponto de partida do labirinto. */
+    
+    start.x = inicial[0] - 1, start.y = inicial[1] - 1; /* Coloca-se na estrutura "start" a celula do ponto de partida. */
+    objective.x = final[0] - 1, objective.y = final[1] - 1; /* Coloca-se na estrutura "objective" a celula do ponto de chegada. */
+
+    /*
+    Condicao que verifica se a coordenada do ponto de partida nao e branca, retornando logo 0 se nao for. */
+    if(tabuleiro[start.x][start.y] != 0){
         return 0;
     }
-    queue[0] = start;
-    visited[start.x][start.y] = 1;
+    queue[0] = start; /* A lista de espera ira conter inicialmente a celula do ponto de partida. */
+    visited[start.x][start.y] = 1; 
+
+    /*
+    Conjunto de operacoes explicadas no cabecalho da funcao que permitirao saber se ha ou nao ligacao da 
+    celula de partida do labirinto ate a celula de chegada. */
     while(q_size > 0){
         current = queue[0];
-        for(int i = 0; i < q_size - 1; i++){
+        for(int i = 0; i < (dim[0] * dim[1] - 1); i++){
             queue[i] = queue[i + 1];
         }
         q_size--;
@@ -205,7 +252,7 @@ int BFS(int *inicial,int *final,int **tabuleiro,int *dim){
             return 1;
         }
 
-        Coord adj;
+        Coord adj; /* Estrutura que vai guardar as coordendas das celulas adjacentes a celula em causa. */
         if(current.x - 1 >= 0 && visited[current.x - 1][current.y] == 0 && tabuleiro[current.x - 1][current.y] == 0){
             adj.y = current.y, adj.x = current.x - 1;
             queue[q_size] = adj;
