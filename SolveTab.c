@@ -35,14 +35,14 @@ typedef struct Coord{
  *             dim       -> Ponteiro para a dimensao dos labirintos.
  *             fp1       -> Ponteiro para o ficheiro de saida onde sao escritas
  *                          as soluçoes ao problema.
- * 
+ *  
  * Retorna: (void).
  *
  * Descricao: Esta funcao permite dar resposta ao problema inicial face as
  *            diferentes variantes de funcionamento.
  *     
  *****************************************************************************/
-void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
+void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1,int number_of_lines){
 
     /* 
     Condicao que permite resolver a variante de funcionamento A1. */
@@ -50,64 +50,29 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
         fprintf(fp1,"%d\n\n",tabuleiro[def[0] - 1][def[1] - 1]);
     }
 
-    /* 
-    Condicao que permite resolver a variante de funcionamento A2. */
-    if(strcmp(mode,"A2") == 0){
+    /*if(strcmp(mode,"A2") == 0 || strcmp(mode,"A3") == 0 || strcmp(mode,"A4") == 0){
+        for(int i = -2;i <= 0;i++){
+            for(int k = -2;k <= 0;k++){
+                if(i == k || i - 2 == k || i + 2 == k)
+                    continue;
 
-        /* 
-        Conjunto de condicoes que verificam se as celulas adjacentes a celula em causa (celula a direita,
-        esquerda, baixo e acima) estao dentro do tabuleiro e se sao brancas. */
-        if((outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] == 0)||
-           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == 0)    ||
-           (outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] == 0)||
-           (outside(def[0],def[1] + 1, dim) == 0 && tabuleiro[def[0] - 1][def[1]] == 0)){
-                fprintf(fp1,"1\n\n");
-                return;
+                if(outside(def[0] + i + 1,def[1] + k + 1,dim) == 1)
+                    continue;
+                    
+                if((tabuleiro[def[0] + i][def[1] + k] == 0 && strcmp(mode,"A2") == 0) ||
+                   (tabuleiro[def[0] + i][def[1] + k] == -1 && strcmp(mode,"A4") == 0) ||
+                   (tabuleiro[def[0] + i][def[1] + k] > 0 && strcmp(mode,"A3") == 0)){
+                           fprintf(fp1,"1\n\n");
+                           return;
+                   }
             }
+        }
         fprintf(fp1,"0\n\n");
-        return;
-    }
-
-    /* 
-    Condicao que permite resolver a variante de funcionamento A3. */
-    if(strcmp(mode,"A3") == 0){
-
-        /* 
-        Conjunto de condicoes que verificam se as celulas adjacentes a celula em causa (celula a direita,
-        esquerda, baixo e acima) estao dentro do tabuleiro e se sao cinzentas. */
-        if((outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] > 0)||
-           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] > 0)    ||
-           (outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] > 0)||
-           (outside(def[0],def[1] + 1, dim) == 0 && tabuleiro[def[0] - 1][def[1]] > 0)){
-                fprintf(fp1,"1\n\n");
-                return;
-            }
-        fprintf(fp1,"0\n\n");
-        return;            
-    }
-
-    /* 
-    Condicao que permite resolver a variante de funcionamento A4. */
-    if(strcmp(mode,"A4") == 0){
-
-        /* 
-        Conjunto de condicoes que verificam se as celulas adjacentes a celula em causa (celula a direita,
-        esquerda, baixo e acima) estao dentro do tabuleiro e se sao pretas. */
-        if((outside(def[0] - 1,def[1],dim) == 0 && tabuleiro[def[0] - 2][def[1] - 1] == -1)||
-           (outside(def[0] + 1,def[1],dim) == 0 && tabuleiro[def[0]][def[1] - 1] == -1)    ||
-           (outside(def[0],def[1] - 1,dim) == 0 && tabuleiro[def[0] - 1][def[1] - 2] == -1)||
-           (outside(def[0],def[1] + 1, dim) == 0 && tabuleiro[def[0] - 1][def[1]] == -1)){
-                fprintf(fp1,"1\n\n");
-                return;
-            }
-        fprintf(fp1,"0\n\n");
-        return;
-    }
+    }*/
 
     /* 
     Condicao que permite resolver a variante de funcionamento A5. */
     if(strcmp(mode,"A5") == 0){
-
         /* 
         Verifica se a celula em causa e preta ou branca, retornando -1 se sim. */
         if(tabuleiro[def[0] - 1][def[1] - 1] == 0 || tabuleiro[def[0] - 1][def[1] - 1] == -1){
@@ -166,8 +131,8 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
 
     /* 
     Condicao que permite resolver a variante de funcionamento A6. */
-    if( strcmp(mode,"A6") == 0){
-        if(BFS(def,sec,tabuleiro,dim) == 1){
+    if(strcmp(mode,"A6") == 0){
+        if(BFS(def,sec,tabuleiro,dim,number_of_lines) == 1){
             fprintf(fp1,"1\n\n");
         }else
             fprintf(fp1,"0\n\n");
@@ -175,6 +140,24 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
 
 }
 
+int Solve_A2_A3_A4(int **tabuleiro,int *def,char* mode,int *dim){
+        for(int i = -2;i <= 0;i++){
+            for(int k = -2;k <= 0;k++){
+                if(i == k || i - 2 == k || i + 2 == k)
+                    continue;
+
+                if(outside(def[0] + i + 1,def[1] + k + 1,dim) == 1)
+                    continue;
+                    
+                if((tabuleiro[def[0] + i][def[1] + k] == 0 && strcmp(mode,"A2") == 0) ||
+                   (tabuleiro[def[0] + i][def[1] + k] == -1 && strcmp(mode,"A4") == 0) ||
+                   (tabuleiro[def[0] + i][def[1] + k] > 0 && strcmp(mode,"A3") == 0)){
+                        return 1;
+                   }
+            }
+        }
+    return 0;
+}
 
 /******************************************************************************
  * BFS ()
@@ -209,19 +192,13 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1){
  *            se este exisitir. 
  *     
  *****************************************************************************/
-int BFS(int *inicial,int *final,int **tabuleiro,int *dim){
-
-    Coord queue[dim[0] * dim[1]]; /* Inicializacao do vetor que correspondera a fila de espera. */
+int BFS(int *inicial,int *final,int **tabuleiro,int *dim,int number_of_lines){
+    Coord queue[dim[0] * dim[1] - number_of_lines]; /* Inicializacao do vetor que correspondera a fila de espera. */
     int q_size = 1; /* Inicializacao do tamanho da fila de espera -> inicialmente ira conter apenas a celula do ponto de partida. */
-    int visited[dim[0]][dim[1]]; /* Indicacao do tamanho do vetor que ira conter as celulas ja verificdas. */
-
-    /* 
-    Inicializacao do vetor que ira conter as celulas ja verificadas. */
-    for(int a = 0; a < dim[0];a++){
-        for(int b = 0; b < dim[1];b++){
-            visited[a][b] = 0;
-        }
-    }
+    int **visited = (int**)calloc(sizeof(int*),dim[0]);  /*Indicacao do tamanho do vetor que ira conter as celulas ja verificdas.*/
+    for(int i = 0; i < dim[0];i++)
+        visited[i] = (int*)calloc(sizeof(int),dim[1]);
+    
 
     Coord objective; /* Estrutura que vai guardar as coordendas da celula correspondente ao ponto de chegada do labirinto. */
     Coord current; /* Estrutura que vai guardar as coordendas da celula que esta as ser verificada na queue. */
@@ -233,6 +210,9 @@ int BFS(int *inicial,int *final,int **tabuleiro,int *dim){
     /*
     Condicao que verifica se a coordenada do ponto de partida nao e branca, retornando logo 0 se nao for. */
     if(tabuleiro[start.x][start.y] != 0){
+        for(int l = 0;l < dim[0];l++)
+            free(visited[l]);  
+        free(visited);
         return 0;
     }
     queue[0] = start; /* A lista de espera ira conter inicialmente a celula do ponto de partida. */
@@ -243,12 +223,15 @@ int BFS(int *inicial,int *final,int **tabuleiro,int *dim){
     celula de partida do labirinto ate a celula de chegada. */
     while(q_size > 0){
         current = queue[0];
-        for(int i = 0; i < (dim[0] * dim[1] - 1); i++){
+        for(int i = 0; i < q_size - 1; i++){
             queue[i] = queue[i + 1];
         }
         q_size--;
 
         if(current.x == objective.x && current.y == objective.y){
+            for(int l = 0;l < dim[0];l++)
+                free(visited[l]);  
+            free(visited);
             return 1;
         }
 
@@ -283,5 +266,10 @@ int BFS(int *inicial,int *final,int **tabuleiro,int *dim){
         }
 
     }
+
+    for(int l = 0;l < dim[0];l++)
+        free(visited[l]);  
+    free(visited);
+
     return 0;
 }

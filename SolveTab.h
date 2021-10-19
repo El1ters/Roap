@@ -12,7 +12,8 @@
 #include <stdio.h>
 #include "ReadFile.h"
 
-void SolveTab(int **tabuleiro,char *mode,int *def,int * sec,int *dim,FILE *fp1);
-int BFS(int *inicial,int *final,int **tabuleiro,int *dim);
+void SolveTab(int **tabuleiro,char *mode,int *def,int * sec,int *dim,FILE *fp1,int number_of_lines);
+int BFS(int *inicial,int *final,int **tabuleiro,int *dim,int number_of_lines);
+int Solve_A2_A3_A4(int **tabuleiro,int *def,char* mode,int *dim);
 
 #endif
