@@ -97,9 +97,9 @@ void ReadFile(char **argv){
                         return;
                     }
                     if(outside(sec[0],sec[1],dim) == 1){
-                        /*if(outside(def[0],def[1],dim) == 1){
+                        if(outside(def[0],def[1],dim) == 1){
                             break;
-                        }*/
+                        }
                         no_allocation = 1;
                         fprintf(fp1,"-2\n\n");
                     }   
@@ -123,12 +123,7 @@ void ReadFile(char **argv){
                     return;
                 }
                 if(number_of_lines == 0 && no_allocation == 0 && board_not_valide == 0){
-                    if(strcmp(mode,"A1") == 0 || strcmp(mode,"A5") == 0 || strcmp(mode,"A6") == 0){
-                        SolveTab(tabuleiro,mode,def,sec,dim,fp1,number_of_lines);
-                    }else{
-                        fprintf(fp1,"%d\n\n",Solve_A2_A3_A4(tabuleiro,def,mode,dim));
-                    }
-                
+                    SolveTab(tabuleiro,mode,def,sec,dim,fp1,number_of_lines);
                     for(int k = 0;k < dim[0];k++){
                         free(tabuleiro[k]);
                     }    
@@ -156,12 +151,7 @@ void ReadFile(char **argv){
         if(count == number_of_lines){
             flag = 0;
             if(no_allocation == 0 && board_not_valide == 0){
-                if(strcmp(mode,"A1") == 0 || strcmp(mode,"A5") == 0 || strcmp(mode,"A6") == 0){
-                    SolveTab(tabuleiro,mode,def,sec,dim,fp1,number_of_lines);
-                }else{
-                    fprintf(fp1,"%d\n\n",Solve_A2_A3_A4(tabuleiro,def,mode,dim));
-                }
-                
+                SolveTab(tabuleiro,mode,def,sec,dim,fp1,number_of_lines);
                 for(int k = 0;k < dim[0];k++){
                     free(tabuleiro[k]);
                 }    

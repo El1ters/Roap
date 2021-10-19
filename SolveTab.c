@@ -50,7 +50,7 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1,in
         fprintf(fp1,"%d\n\n",tabuleiro[def[0] - 1][def[1] - 1]);
     }
 
-    /*if(strcmp(mode,"A2") == 0 || strcmp(mode,"A3") == 0 || strcmp(mode,"A4") == 0){
+    if(strcmp(mode,"A2") == 0 || strcmp(mode,"A3") == 0 || strcmp(mode,"A4") == 0){
         for(int i = -2;i <= 0;i++){
             for(int k = -2;k <= 0;k++){
                 if(i == k || i - 2 == k || i + 2 == k)
@@ -68,7 +68,7 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1,in
             }
         }
         fprintf(fp1,"0\n\n");
-    }*/
+    }
 
     /* 
     Condicao que permite resolver a variante de funcionamento A5. */
@@ -138,25 +138,6 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1,in
             fprintf(fp1,"0\n\n");
     }
 
-}
-
-int Solve_A2_A3_A4(int **tabuleiro,int *def,char* mode,int *dim){
-        for(int i = -2;i <= 0;i++){
-            for(int k = -2;k <= 0;k++){
-                if(i == k || i - 2 == k || i + 2 == k)
-                    continue;
-
-                if(outside(def[0] + i + 1,def[1] + k + 1,dim) == 1)
-                    continue;
-                    
-                if((tabuleiro[def[0] + i][def[1] + k] == 0 && strcmp(mode,"A2") == 0) ||
-                   (tabuleiro[def[0] + i][def[1] + k] == -1 && strcmp(mode,"A4") == 0) ||
-                   (tabuleiro[def[0] + i][def[1] + k] > 0 && strcmp(mode,"A3") == 0)){
-                        return 1;
-                   }
-            }
-        }
-    return 0;
 }
 
 /******************************************************************************
