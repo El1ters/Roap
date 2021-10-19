@@ -257,6 +257,19 @@ char *getfilename(char *argv[]){
     return b;
 }
 
+
+/******************************************************************************
+ * extensionName ()
+ *
+ * Argumentos: argv -> ponteiro que aponta para um vetor de strings que contém
+ *                     os argumentos do terminal.
+ * 
+ * Retorna: (void).
+ * 
+ * Descricao: Esta funcao apenas serve para verificar se os ultimos 3 caracteres
+ *            do ficheiro teste de entrada sao in1. Se nao for da-se um exit(0).
+ *              
+ *****************************************************************************/
 void extensionName(char *argv[]){
 
     char *a = NULL;

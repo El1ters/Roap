@@ -50,6 +50,8 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1,in
         fprintf(fp1,"%d\n\n",tabuleiro[def[0] - 1][def[1] - 1]);
     }
 
+    /* 
+    Condicao que permite resolver a variante de funcionamento A2, A3 e A4. */
     if(strcmp(mode,"A2") == 0 || strcmp(mode,"A3") == 0 || strcmp(mode,"A4") == 0){
         for(int i = -2;i <= 0;i++){
             for(int k = -2;k <= 0;k++){
@@ -59,7 +61,7 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1,in
                 if(outside(def[0] + i + 1,def[1] + k + 1,dim) == 1)
                     continue;
                     
-                if((tabuleiro[def[0] + i][def[1] + k] == 0 && strcmp(mode,"A2") == 0) ||
+                if((tabuleiro[def[0] + i][def[1] + k] == 0 && strcmp(mode,"A2") == 0)  ||
                    (tabuleiro[def[0] + i][def[1] + k] == -1 && strcmp(mode,"A4") == 0) ||
                    (tabuleiro[def[0] + i][def[1] + k] > 0 && strcmp(mode,"A3") == 0)){
                            fprintf(fp1,"1\n\n");
@@ -140,6 +142,7 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1,in
 
 }
 
+
 /******************************************************************************
  * BFS ()
  *
@@ -170,9 +173,11 @@ void SolveTab(int **tabuleiro,char *mode,int *def,int *sec,int *dim,FILE *fp1,in
  *            (verificar celula a celula, colocando-as na queue, passando as ja 
  *            verificadas para o vetor de espera, verificando as adjancentes da celula 
  *            que esta em causa) ate chegar a celula correspondente ao ponto de chegada,
- *            se este exisitir. 
+ *            se esta exisitir. 
  *     
  *****************************************************************************/
+
+
 int BFS(int *inicial,int *final,int **tabuleiro,int *dim,int number_of_lines){
     Coord queue[dim[0] * dim[1] - number_of_lines]; /* Inicializacao do vetor que correspondera a fila de espera. */
     int q_size = 1; /* Inicializacao do tamanho da fila de espera -> inicialmente ira conter apenas a celula do ponto de partida. */
