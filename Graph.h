@@ -19,5 +19,6 @@ Graph* GraphInit(int V);
 void GraphInsertE(Graph *G,int v_inicial,int v_final);
 Node *New(int v,Node *next);
 int Verify(Graph *G,int v,int w);
+void ChangeMin(Graph *G,int v, int w, int value);
 
 #endif

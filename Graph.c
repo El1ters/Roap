@@ -30,6 +30,7 @@ Node *New(int v,Node *next){
         exit(0);
     }
     x->V = v;
+    x->min = 100;
     x->next = next; 
     return x;
 }
@@ -44,3 +45,21 @@ int Verify(Graph *G,int v,int w){
         }
     return 1;
 }
+
+void ChangeMin(Graph *G,int v, int w, int value){
+    Node *aux;
+        aux = G->adj[(v * -1) - 2];
+        while(aux != NULL){
+            if(aux->V == w){
+                if(value < aux->min){
+                    printf("%d %d %d->",v,w, aux->min);
+                    aux->min = value;
+                    printf("%d\n",value);
+                    return;
+                }    
+            }
+            aux = aux->next;
+        }
+}
+
+Graph *CreateGraph(int **tabuleiro)

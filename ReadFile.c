@@ -23,7 +23,7 @@ void Escrita_dados(Graph *node_list)
         aux = node_list->adj[l];
         while (aux != NULL)
         {
-            printf("%d ", aux->V);
+            printf("%d:%d ", aux->V,aux->min);
             aux = aux->next;
         }
         printf("\n");
@@ -157,7 +157,7 @@ void ReadFile(char **argv){
                     /*tabuleiro resolvido*/
                     exit(0);
                 }
-                /*mudar depois isto*/
+                /*passar depois para uma função*/
                 Graph *G = GraphInit(different_cells);
                 int room_value[2] = {0,0};
                 for(int c = 0;c < dim[0];c++){
@@ -172,9 +172,13 @@ void ReadFile(char **argv){
                                         if(tabuleiro[c + 1][d] < -1 && tabuleiro[c - 1][d] < -1){    
                                             if(G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL ){
                                                 GraphInsertE(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d]);
+                                                G->adj[(tabuleiro[c + 1][d] * -1) -2]->min = tabuleiro[c][d];
+                                                G->adj[(tabuleiro[c - 1][d] * -1) -2]->min = tabuleiro[c][d];
                                             }else{
                                                 if(Verify(G,tabuleiro[c - 1][d],tabuleiro[c + 1][d]) == 1)
-                                                    GraphInsertE(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d]);                      
+                                                    GraphInsertE(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d]);
+                                                ChangeMin(G,tabuleiro[c - 1][d],tabuleiro[c + 1][d],tabuleiro[c][d]);
+                                                ChangeMin(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d],tabuleiro[c][d]);                      
                                             }
                                         }  
                                     }
@@ -184,9 +188,13 @@ void ReadFile(char **argv){
                                         if(tabuleiro[c][d + 1] < -1 && tabuleiro[c][d - 1] < -1){  
                                             if(G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL ){
                                                 GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);
+                                                G->adj[(tabuleiro[c][d + 1] * -1) -2]->min = tabuleiro[c][d];
+                                                G->adj[(tabuleiro[c][d - 1] * -1) -2]->min = tabuleiro[c][d];
                                             }else{
                                                 if(Verify(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]) == 1)
-                                                    GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);    
+                                                    GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);
+                                                ChangeMin(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1],tabuleiro[c][d]);
+                                                ChangeMin(G,tabuleiro[c][d - 1],tabuleiro[c][d + 1],tabuleiro[c][d]);        
                                             }
                                         }  
                                     }
