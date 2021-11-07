@@ -20,5 +20,7 @@ void GraphInsertE(Graph *G,int v_inicial,int v_final);
 Node *New(int v,Node *next);
 int Verify(Graph *G,int v,int w);
 void ChangeMin(Graph *G,int v, int w, int value);
+void FreeGraph(Graph *G,int different_cells);
+Graph *CreateGraph(int **tabuleiro,int *dim,int different_cells);
 
 #endif

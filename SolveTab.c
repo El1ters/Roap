@@ -16,14 +16,6 @@
 #include "ReadFile.h"
 
 
-/*
-Estrutura que guarda coordenadas de celulas do labirinto. */
-typedef struct Coord{
-    int x;
-    int y;
-}Coord;
-
-
 /******************************************************************************
  * SolveTab ()
  *
@@ -135,58 +127,47 @@ int Break(int **tabuleiro,int *def,int *dim){
 
 
 void BFS(int *inicial,int **tabuleiro,int *dim,int number_of_lines,int value){
-    Coord queue[dim[0] * dim[1] - number_of_lines]; /* Inicializacao do vetor que correspondera a fila de espera. */
-    int q_size = 1; /* Inicializacao do tamanho da fila de espera -> inicialmente ira conter apenas a celula do ponto de partida. */
+    Coord queue[(dim[0] * dim[1] / 2) - number_of_lines];  /*Inicializacao do vetor que correspondera a fila de espera. */
+    int q_size = 0;  /*Inicializacao do tamanho da fila de espera -> inicialmente ira conter apenas a celula do ponto de partida. */
     
     Coord current; /* Estrutura que vai guardar as coordendas da celula que esta as ser verificada na queue. */
     Coord start; /* Estrutura que vai guardar as coordendas da celula correspondente ao ponto de partida do labirinto. */
-    
+
     start.x = inicial[0], start.y = inicial[1]; /* Coloca-se na estrutura "start" a celula do ponto de partida. */
     tabuleiro[start.x][start.y] = value;
 
-    queue[0] = start; /* A lista de espera ira conter inicialmente a celula do ponto de partida. */
-
+    queue[q_size++] = start; /* A lista de espera ira conter inicialmente a celula do ponto de partida. */
+    
     /*
     Conjunto de operacoes explicadas no cabecalho da funcao que permitirao saber se ha ou nao ligacao da 
     celula de partida do labirinto ate a celula de chegada. */
     while(q_size > 0){
-        current = queue[0];
-        for(int i = 0; i < q_size - 1; i++){
-            queue[i] = queue[i + 1];
-        }
-        q_size--;
+        current = queue[--q_size];
 
         Coord adj; /* Estrutura que vai guardar as coordendas das celulas adjacentes a celula em causa. */
         if(current.x - 1 >= 0 && tabuleiro[current.x - 1][current.y] == 0){
             adj.y = current.y, adj.x = current.x - 1;
-            queue[q_size] = adj;
-            tabuleiro[current.x - 1][current.y] = value; 
-            q_size++;
-            
-        }
-
+            queue[q_size++] = adj;
+            tabuleiro[current.x - 1][current.y] = value;            
+        } 
         
         if(current.x + 1 < dim[0] && tabuleiro[current.x + 1][current.y] == 0){
             adj.x = current.x + 1, adj.y = current.y;
-            queue[q_size] = adj;
+            queue[q_size++] = adj;
             tabuleiro[current.x + 1][current.y] = value;
-            q_size++;
         }
-
         if(current.y - 1 >= 0 && tabuleiro[current.x][current.y - 1] == 0){
             adj.x = current.x, adj.y = current.y - 1;
-            queue[q_size] = adj;
+            queue[q_size++] = adj;
             tabuleiro[current.x][current.y - 1] = value;
-            q_size++;
         }
 
         if(current.y + 1 < dim[1] && tabuleiro[current.x][current.y + 1] == 0){
             adj.x = current.x, adj.y = current.y + 1;
-            queue[q_size] = adj;
+            queue[q_size++] = adj;
             tabuleiro[current.x][current.y + 1] = value;
-            q_size++;
         }
-
     }
 }
+
 

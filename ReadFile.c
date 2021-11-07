@@ -17,16 +17,19 @@
 void Escrita_dados(Graph *node_list)
 {
     int  l;
+    int sub = -2;
     Node *aux;
     for (l = 0; l < node_list->V; l++)
     {
         aux = node_list->adj[l];
+        printf("%d-> ",sub);
         while (aux != NULL)
         {
             printf("%d:%d ", aux->V,aux->min);
             aux = aux->next;
         }
         printf("\n");
+        sub--;
     }
 }
 
@@ -54,6 +57,7 @@ void ReadFile(char **argv){
     int cell; /* Variavel auxiliar que vai guardar as celulas dos labirintos. */
     int no_allocation = 0;
     int f[2];
+    Graph *G;
     int sub = -2;
     int different_cells = 0;
     
@@ -140,6 +144,7 @@ void ReadFile(char **argv){
                 }
                 break;
         }
+        
         if(count == number_of_lines){
             if(no_allocation == 0){
                 for(int a = 0;a < dim[0];a++){
@@ -157,53 +162,10 @@ void ReadFile(char **argv){
                     /*tabuleiro resolvido*/
                     exit(0);
                 }
-                /*passar depois para uma função*/
-                Graph *G = GraphInit(different_cells);
-                int room_value[2] = {0,0};
-                for(int c = 0;c < dim[0];c++){
-                    for(int d = 0; d < dim[1];d++){
-                        if(tabuleiro[c][d] > -1){
-                            f[0] = c;
-                            f[1] = d;
-                            if(Break(tabuleiro,f,dim) == 1){
-                                    if(c + 1 < dim[0] && c - 1 >= 0){
-                                        room_value[0] =  tabuleiro[c + 1][d];
-                                        room_value[1] = tabuleiro[c - 1][d];
-                                        if(tabuleiro[c + 1][d] < -1 && tabuleiro[c - 1][d] < -1){    
-                                            if(G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL ){
-                                                GraphInsertE(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d]);
-                                                G->adj[(tabuleiro[c + 1][d] * -1) -2]->min = tabuleiro[c][d];
-                                                G->adj[(tabuleiro[c - 1][d] * -1) -2]->min = tabuleiro[c][d];
-                                            }else{
-                                                if(Verify(G,tabuleiro[c - 1][d],tabuleiro[c + 1][d]) == 1)
-                                                    GraphInsertE(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d]);
-                                                ChangeMin(G,tabuleiro[c - 1][d],tabuleiro[c + 1][d],tabuleiro[c][d]);
-                                                ChangeMin(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d],tabuleiro[c][d]);                      
-                                            }
-                                        }  
-                                    }
-                                    if(d + 1 < dim[1] && d - 1 >= 0){
-                                        room_value[0] = tabuleiro[c][d - 1];
-                                        room_value[1] = tabuleiro[c][d + 1];
-                                        if(tabuleiro[c][d + 1] < -1 && tabuleiro[c][d - 1] < -1){  
-                                            if(G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL ){
-                                                GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);
-                                                G->adj[(tabuleiro[c][d + 1] * -1) -2]->min = tabuleiro[c][d];
-                                                G->adj[(tabuleiro[c][d - 1] * -1) -2]->min = tabuleiro[c][d];
-                                            }else{
-                                                if(Verify(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]) == 1)
-                                                    GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);
-                                                ChangeMin(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1],tabuleiro[c][d]);
-                                                ChangeMin(G,tabuleiro[c][d - 1],tabuleiro[c][d + 1],tabuleiro[c][d]);        
-                                            }
-                                        }  
-                                    }
-                            }
-                        }
-                    }
-                }
-                PrintTab(tabuleiro,dim);
-                Escrita_dados(G);
+                G = CreateGraph(tabuleiro,dim,different_cells);
+                /*PrintTab(tabuleiro,dim);
+                Escrita_dados(G);*/
+                FreeGraph(G,different_cells);
                 for(int k = 0;k < dim[0];k++){
                     free(tabuleiro[k]);
                 }    
@@ -358,4 +320,3 @@ void PrintTab(int **tabuleiro,int *dim){
         printf("\n");
     }
 }
-
