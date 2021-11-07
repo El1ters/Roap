@@ -36,15 +36,11 @@ Node *New(int v,Node *next){
 
 int Verify(Graph *G,int v,int w){
     Node *aux;
-        if(G->adj[(v * -1) - 2]->V == w){
-            return 0;
-        }else{
-            aux = G->adj[(v * -1) - 2];
-            while(aux != NULL){
-                if(aux->V == w)
-                    return 0;
-                aux = aux->next;
-            }
+        aux = G->adj[(v * -1) - 2];
+        while(aux != NULL){
+            if(aux->V == w)
+                return 0;
+            aux = aux->next;
         }
     return 1;
 }
