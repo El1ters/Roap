@@ -12,7 +12,23 @@
 #include <string.h>
 #include "ReadFile.h"
 #include "SolveTab.h"
+#include "Graph.h"
 
+void Escrita_dados(Graph *node_list)
+{
+    int  l;
+    Node *aux;
+    for (l = 0; l < node_list->V; l++)
+    {
+        aux = node_list->adj[l];
+        while (aux != NULL)
+        {
+            printf("%d ", aux->V);
+            aux = aux->next;
+        }
+        printf("\n");
+    }
+}
 
 /******************************************************************************
  * ReadFile ()
@@ -29,19 +45,20 @@ void ReadFile(char **argv){
     FILE *fp,*fp1; /* Ficheiros de entrada e de saida, respetivamente. */
     int **tabuleiro = NULL; /* Vetor bidimensional que vai guardar os dados do fiheiro de entrada. */
     int flag = 1; /* Variavel auxiliar que permite saber que linha do ficheiro de entrada estamos a ler. */ 
-    int number_of_lines = 100; /* Variavel auxiliar que contem o numero de celulas. */
+    int number_of_lines = 1; /* Variavel auxiliar que contem o numero de celulas. */
     int count = 0; /* Variavel auxiliar que conta o numero de coordenadas lidas. */
     int dim[2]; /* Vetor que guarda as dimensoes do labirinto. */
-    int def[2]; /* Vetor que guarda as coordenadas da celula da 2ª linha do ficheiro de entrada. */
+    int def[2];  /*Vetor que guarda as coordenadas da celula da 2ª linha do ficheiro de entrada. */
     int linha; /* Numero de linhas dos labirintos. */
     int coluna; /* Numero de colunas dos labirintos. */
     int cell; /* Variavel auxiliar que vai guardar as celulas dos labirintos. */
-    char mode[3]; /* Vetor que guarda o modo das variantes de funcionamento. */
-    int sec[2] = {0,0}; /* Inicializacao de um vetor que ira conter as coordendas do ponto de chegada  
-                           do labirinto para a variedade de funcionamento A6. */
-    int no_allocation = 0,board_not_valide = 0;
+    int no_allocation = 0;
+    int f[2];
+    int sub = -2;
+    int different_cells = 0;
+    
 
-    extensionName(argv); 
+    //extensionName(argv); 
     /* 
     Filename fica a apontar para a posicao de memoria que contem o nome do ficheiro de saida
     atraves da chamada a funcao getfilename. */
@@ -49,10 +66,10 @@ void ReadFile(char **argv){
  
     /*
     Acrescenta ao ficheiro de saida o "".sol1". */
-    strcat(filename,".sol1"); 
+    strcat(filename,".sol"); 
     /* 
     Condicao de erro para o ficheiro de entrada. */
-    fp = fopen(argv[2],"r");
+    fp = fopen(argv[1],"r");
     if(fp == NULL){ 
         free(filename);
         exit(0);
@@ -79,34 +96,20 @@ void ReadFile(char **argv){
                 }
                 break;
             case 2:
-                if(fscanf(fp,"%d %d %s",&def[0],&def[1],mode) != 3){
+                if(fscanf(fp,"%d %d",&def[0],&def[1]) != 2){
+                    fclose(fp);
+                    fclose(fp1);
+                    free(filename);
                     return;
                 }
                 if(dim[0] <= 0 || dim[1] <= 0){
-                    board_not_valide = 1;
+                    no_allocation = 1;
                 }
                 if(outside(def[0],def[1],dim) == 1){
                     no_allocation = 1;
                     fprintf(fp1,"-2\n\n");
                 }
-                if(strcmp(mode,"A6") == 0){
-                    if(fscanf(fp,"%d %d",&sec[0],&sec[1]) != 2){
-                        fclose(fp);
-                        fclose(fp1);
-                        free(filename);
-                        return;
-                    }
-                    if(outside(sec[0],sec[1],dim) == 1){
-                        if(outside(def[0],def[1],dim) == 1){
-                            break;
-                        }
-                        no_allocation = 1;
-                        fprintf(fp1,"-2\n\n");
-                    }   
-                }
-                if(no_allocation == 0 && board_not_valide == 0){
-                    tabuleiro = Allocate(dim[0],dim[1]);
-                } 
+                
                 break;
             case 3:
                 if(fscanf(fp,"%d",&number_of_lines) != 1){
@@ -116,23 +119,13 @@ void ReadFile(char **argv){
                     return;
                 }
 
-                if(number_of_lines == 0  && no_allocation == 1){
-                    fclose(fp);
-                    fclose(fp1);
-                    free(filename);
-                    return;
+                if(number_of_lines == 0){
+                    no_allocation = 1;
                 }
-                if(number_of_lines == 0 && no_allocation == 0 && board_not_valide == 0){
-                    SolveTab(tabuleiro,mode,def,sec,dim,fp1,number_of_lines);
-                    for(int k = 0;k < dim[0];k++){
-                        free(tabuleiro[k]);
-                    }    
-                    free(tabuleiro);
-                    fclose(fp);
-                    fclose(fp1);
-                    free(filename);
-                    return;
-                }
+
+                if(no_allocation == 0){
+                    tabuleiro = Allocate(dim[0],dim[1]);
+                } 
                     
                 break;
             default:
@@ -142,24 +135,76 @@ void ReadFile(char **argv){
                     free(filename);
                     return;
                 }   
-                if(no_allocation == 0 && board_not_valide == 0){
+                if(no_allocation == 0){
                     tabuleiro[linha - 1][coluna - 1] = cell;
                 }
                 break;
         }
-        
         if(count == number_of_lines){
-            flag = 0;
-            if(no_allocation == 0 && board_not_valide == 0){
-                SolveTab(tabuleiro,mode,def,sec,dim,fp1,number_of_lines);
+            if(no_allocation == 0){
+                for(int a = 0;a < dim[0];a++){
+                    for(int b = 0;b < dim[1];b++){
+                        if(tabuleiro[a][b] == 0){
+                            f[0] = a;
+                            f[1] = b;
+                            BFS(f,tabuleiro,dim,number_of_lines,sub);
+                            sub--;
+                            different_cells++;
+                        }
+                    }
+                }
+                if(different_cells == 1){
+                    /*tabuleiro resolvido*/
+                    exit(0);
+                }
+                /*mudar depois isto*/
+                Graph *G = GraphInit(different_cells);
+                int room_value[2] = {0,0};
+                for(int c = 0;c < dim[0];c++){
+                    for(int d = 0; d < dim[1];d++){
+                        if(tabuleiro[c][d] > -1){
+                            f[0] = c;
+                            f[1] = d;
+                            if(Break(tabuleiro,f,dim) == 1){
+                                    if(c + 1 < dim[0] && c - 1 >= 0){
+                                        room_value[0] =  tabuleiro[c + 1][d];
+                                        room_value[1] = tabuleiro[c - 1][d];
+                                        if(tabuleiro[c + 1][d] < -1 && tabuleiro[c - 1][d] < -1){    
+                                            if(G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL ){
+                                                GraphInsertE(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d]);
+                                            }else{
+                                                if(Verify(G,tabuleiro[c - 1][d],tabuleiro[c + 1][d]) == 1)
+                                                    GraphInsertE(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d]);                      
+                                            }
+                                        }  
+                                    }
+                                    if(d + 1 < dim[1] && d - 1 >= 0){
+                                        room_value[0] = tabuleiro[c][d - 1];
+                                        room_value[1] = tabuleiro[c][d + 1];
+                                        if(tabuleiro[c][d + 1] < -1 && tabuleiro[c][d - 1] < -1){  
+                                            if(G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL ){
+                                                GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);
+                                            }else{
+                                                if(Verify(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]) == 1)
+                                                    GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);    
+                                            }
+                                        }  
+                                    }
+                            }
+                        }
+                    }
+                }
+                PrintTab(tabuleiro,dim);
+                Escrita_dados(G);
                 for(int k = 0;k < dim[0];k++){
                     free(tabuleiro[k]);
                 }    
                     free(tabuleiro);
             }
             no_allocation = 0;
-            board_not_valide = 0;
+            number_of_lines = 1;
             count = 0;
+            flag = 0;
         }else{
             flag++;
         }
@@ -167,6 +212,9 @@ void ReadFile(char **argv){
             count++;
         }  
     }
+    fclose(fp);
+    fclose(fp1);
+    free(filename);
 }
 
 
@@ -246,14 +294,14 @@ char *getfilename(char *argv[]){
     char *a = NULL;
     char *b = NULL;
     int k = 0;
-    if(argv[2] == NULL){
+    if(argv[1] == NULL){
         exit(0);
     }
 
-    for(a = argv[2]; *a != '\0'; a++, k++);
+    for(a = argv[1]; *a != '\0'; a++, k++);
     b = (char*)calloc(sizeof(char), k + 2);
     for(a--; *a != '.';a--,k--);
-    strncpy(b,argv[2],k - 1);
+    strncpy(b,argv[1],k - 1);
     return b;
 }
 
@@ -274,15 +322,32 @@ void extensionName(char *argv[]){
 
     char *a = NULL;
     int k = 0;
-    if(argv[2] == NULL){
+    if(argv[1] == NULL){
         exit(0);
     }
 
-    for(a = argv[2]; *a != '\0'; a++, k++);
+    for(a = argv[1]; *a != '\0'; a++, k++);
     for(a--; *a != '.';a--,k--);
     a++;
-    if(strcmp(a,"in1") != 0){
+    if(strcmp(a,"in") != 0){
         exit(0);
     }
     return;
 }
+
+void PrintTab(int **tabuleiro,int *dim){
+    for(int i = 0;i < dim[0];i++){
+        for(int j = 0;j < dim[1];j++){
+            if(tabuleiro[i][j] == -1){
+                printf(" X ");
+            }
+            else if(tabuleiro[i][j] < -1){
+                printf("|%d|",tabuleiro[i][j] * -1);
+            }else{
+                printf(" %d ",tabuleiro[i][j]);
+            }
+        }
+        printf("\n");
+    }
+}
+
