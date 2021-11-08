@@ -20,10 +20,6 @@ typedef struct Coord{
 }Coord;
 
 int Break(int **tabuleiro,int *def,int *dim);
-void BFS(int *inicial,int **tabuleiro,int *dim,int number_of_lines,int value);
-/*void Init(int pSize);
-void Push(Coord pI);
-int IsEmpty();
-Coord Pop();*/
+void BFS(int *inicial,int **tabuleiro,int *dim,int number_of_lines,int value,Coord *queue);
 
 #endif

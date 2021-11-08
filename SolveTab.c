@@ -126,10 +126,8 @@ int Break(int **tabuleiro,int *def,int *dim){
  *****************************************************************************/
 
 
-void BFS(int *inicial,int **tabuleiro,int *dim,int number_of_lines,int value){
-    Coord queue[(dim[0] * dim[1] / 2) - number_of_lines];  /*Inicializacao do vetor que correspondera a fila de espera. */
+void BFS(int *inicial,int **tabuleiro,int *dim,int number_of_lines,int value,Coord *queue){
     int q_size = 0;  /*Inicializacao do tamanho da fila de espera -> inicialmente ira conter apenas a celula do ponto de partida. */
-    
     Coord current; /* Estrutura que vai guardar as coordendas da celula que esta as ser verificada na queue. */
     Coord start; /* Estrutura que vai guardar as coordendas da celula correspondente ao ponto de partida do labirinto. */
 
@@ -143,7 +141,6 @@ void BFS(int *inicial,int **tabuleiro,int *dim,int number_of_lines,int value){
     celula de partida do labirinto ate a celula de chegada. */
     while(q_size > 0){
         current = queue[--q_size];
-
         Coord adj; /* Estrutura que vai guardar as coordendas das celulas adjacentes a celula em causa. */
         if(current.x - 1 >= 0 && tabuleiro[current.x - 1][current.y] == 0){
             adj.y = current.y, adj.x = current.x - 1;

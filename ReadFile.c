@@ -56,9 +56,9 @@ void ReadFile(char **argv){
     int coluna; /* Numero de colunas dos labirintos. */
     int cell; /* Variavel auxiliar que vai guardar as celulas dos labirintos. */
     int no_allocation = 0;
-    int f[2];
+    //int f[2];
     Graph *G;
-    int sub = -2;
+    //int sub = -2;
     int different_cells = 0;
     
 
@@ -147,24 +147,14 @@ void ReadFile(char **argv){
         
         if(count == number_of_lines){
             if(no_allocation == 0){
-                for(int a = 0;a < dim[0];a++){
-                    for(int b = 0;b < dim[1];b++){
-                        if(tabuleiro[a][b] == 0){
-                            f[0] = a;
-                            f[1] = b;
-                            BFS(f,tabuleiro,dim,number_of_lines,sub);
-                            sub--;
-                            different_cells++;
-                        }
-                    }
-                }
+                FillBoard(tabuleiro,&different_cells,dim,number_of_lines);
                 if(different_cells == 1){
                     /*tabuleiro resolvido*/
                     exit(0);
                 }
                 G = CreateGraph(tabuleiro,dim,different_cells);
-                /*PrintTab(tabuleiro,dim);
-                Escrita_dados(G);*/
+                PrintTab(tabuleiro,dim);
+                Escrita_dados(G);
                 FreeGraph(G,different_cells);
                 for(int k = 0;k < dim[0];k++){
                     free(tabuleiro[k]);

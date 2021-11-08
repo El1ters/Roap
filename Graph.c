@@ -73,6 +73,24 @@ void FreeGraph(Graph *G,int different_cells){
     free(G);
 }
 
+void FillBoard(int **tabuleiro,int *different_cells,int *dim,int number_of_lines){
+    Coord *queue = malloc((dim[0] * dim[1] - number_of_lines) * sizeof(queue));
+    int sub = -2;
+    int f[2] = {0,0};
+    for(int a = 0;a < dim[0];a++){
+        for(int b = 0;b < dim[1];b++){
+            if(tabuleiro[a][b] == 0){
+                f[0] = a;
+                f[1] = b;
+                BFS(f,tabuleiro,dim,number_of_lines,sub,queue);
+                sub--;
+                (*different_cells)++;
+            }
+        }
+    }
+    free(queue);
+}
+
 Graph *CreateGraph(int **tabuleiro,int *dim,int different_cells){
     Graph *G = GraphInit(different_cells);
     int room_value[2] = {0,0};
@@ -100,23 +118,23 @@ Graph *CreateGraph(int **tabuleiro,int *dim,int different_cells){
                                         ChangeMin(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d],tabuleiro[c][d]);
                                     }  
                                 }
-                            if(d + 1 < dim[1] && d - 1 >= 0){
-                                room_value[0] = tabuleiro[c][d - 1];
-                                room_value[1] = tabuleiro[c][d + 1];
-                                    if(tabuleiro[c][d + 1] < -1 && tabuleiro[c][d - 1] < -1){  
-                                        if(G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL ){
+                        if(d + 1 < dim[1] && d - 1 >= 0){
+                            room_value[0] = tabuleiro[c][d - 1];
+                            room_value[1] = tabuleiro[c][d + 1];
+                                if(tabuleiro[c][d + 1] < -1 && tabuleiro[c][d - 1] < -1){  
+                                    if(G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL ){
+                                        GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);
+                                        G->adj[(tabuleiro[c][d + 1] * -1) -2]->min = tabuleiro[c][d];
+                                        G->adj[(tabuleiro[c][d - 1] * -1) -2]->min = tabuleiro[c][d];
+                                    }else{
+                                        if(Verify(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]) == 1){
                                             GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);
-                                            G->adj[(tabuleiro[c][d + 1] * -1) -2]->min = tabuleiro[c][d];
-                                            G->adj[(tabuleiro[c][d - 1] * -1) -2]->min = tabuleiro[c][d];
-                                        }else{
-                                            if(Verify(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]) == 1){
-                                                    GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);
-                                            }
                                         }
-                                        ChangeMin(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1],tabuleiro[c][d]);
-                                        ChangeMin(G,tabuleiro[c][d - 1],tabuleiro[c][d + 1],tabuleiro[c][d]); 
-                                    }  
-                            }
+                                    }
+                                    ChangeMin(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1],tabuleiro[c][d]);
+                                    ChangeMin(G,tabuleiro[c][d - 1],tabuleiro[c][d + 1],tabuleiro[c][d]); 
+                                }  
+                        }
                     }
             }
         }
