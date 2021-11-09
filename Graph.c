@@ -95,6 +95,7 @@ Graph *CreateGraph(int **tabuleiro,int *dim,int different_cells){
     Graph *G = GraphInit(different_cells);
     int room_value[2] = {0,0};
     int f[2];
+    int dont_create = 0;
     for(int c = 0;c < dim[0];c++){
         for(int d = 0; d < dim[1];d++){
             if(tabuleiro[c][d] > -1){
@@ -104,13 +105,15 @@ Graph *CreateGraph(int **tabuleiro,int *dim,int different_cells){
                         if(c + 1 < dim[0] && c - 1 >= 0){
                             room_value[0] =  tabuleiro[c + 1][d];
                             room_value[1] = tabuleiro[c - 1][d];
-                                if(tabuleiro[c + 1][d] < -1 && tabuleiro[c - 1][d] < -1){    
-                                    if(G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL ){
+                                if(tabuleiro[c + 1][d] < -1 && tabuleiro[c - 1][d] < -1){
+                                    if(tabuleiro[c + 1][d] == tabuleiro[c - 1][d])
+                                        dont_create = 1;
+                                    if((G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL) && dont_create == 0){
                                         GraphInsertE(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d]);   
                                             G->adj[(tabuleiro[c + 1][d] * -1) -2]->min = tabuleiro[c][d];
                                             G->adj[(tabuleiro[c - 1][d] * -1) -2]->min = tabuleiro[c][d];
                                     }else{
-                                        if(Verify(G,tabuleiro[c - 1][d],tabuleiro[c + 1][d]) == 1){
+                                        if((Verify(G,tabuleiro[c - 1][d],tabuleiro[c + 1][d]) == 1) && dont_create == 0){
                                             GraphInsertE(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d]);
                                             }                 
                                         }
@@ -118,22 +121,26 @@ Graph *CreateGraph(int **tabuleiro,int *dim,int different_cells){
                                         ChangeMin(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d],tabuleiro[c][d]);
                                     }  
                                 }
+                                dont_create = 0;
                         if(d + 1 < dim[1] && d - 1 >= 0){
                             room_value[0] = tabuleiro[c][d - 1];
                             room_value[1] = tabuleiro[c][d + 1];
                                 if(tabuleiro[c][d + 1] < -1 && tabuleiro[c][d - 1] < -1){  
-                                    if(G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL ){
+                                    if(tabuleiro[c][d + 1] == tabuleiro[c][d - 1])
+                                        dont_create = 1;
+                                    if((G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL) && dont_create == 0 ){
                                         GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);
                                         G->adj[(tabuleiro[c][d + 1] * -1) -2]->min = tabuleiro[c][d];
                                         G->adj[(tabuleiro[c][d - 1] * -1) -2]->min = tabuleiro[c][d];
                                     }else{
-                                        if(Verify(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]) == 1){
+                                        if(Verify(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]) == 1 && dont_create == 0){
                                             GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);
                                         }
                                     }
                                     ChangeMin(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1],tabuleiro[c][d]);
                                     ChangeMin(G,tabuleiro[c][d - 1],tabuleiro[c][d + 1],tabuleiro[c][d]); 
-                                }  
+                                }
+                                dont_create = 0;
                         }
                     }
             }

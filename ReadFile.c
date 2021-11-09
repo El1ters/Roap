@@ -13,6 +13,7 @@
 #include "ReadFile.h"
 #include "SolveTab.h"
 #include "Graph.h"
+#include "Dijkstra.h"
 
 void Escrita_dados(Graph *node_list)
 {
@@ -56,9 +57,7 @@ void ReadFile(char **argv){
     int coluna; /* Numero de colunas dos labirintos. */
     int cell; /* Variavel auxiliar que vai guardar as celulas dos labirintos. */
     int no_allocation = 0;
-    //int f[2];
     Graph *G;
-    //int sub = -2;
     int different_cells = 0;
     
 
@@ -144,17 +143,16 @@ void ReadFile(char **argv){
                 }
                 break;
         }
-        
         if(count == number_of_lines){
             if(no_allocation == 0){
                 FillBoard(tabuleiro,&different_cells,dim,number_of_lines);
                 if(different_cells == 1){
                     /*tabuleiro resolvido*/
-                    exit(0);
                 }
+                //PrintTab(tabuleiro,dim);
                 G = CreateGraph(tabuleiro,dim,different_cells);
-                PrintTab(tabuleiro,dim);
-                Escrita_dados(G);
+                //Escrita_dados(G);
+                Dijkstra(G,different_cells,-2,tabuleiro[def[0] - 1][def[1] - 1]);
                 FreeGraph(G,different_cells);
                 for(int k = 0;k < dim[0];k++){
                     free(tabuleiro[k]);
@@ -165,6 +163,7 @@ void ReadFile(char **argv){
             number_of_lines = 1;
             count = 0;
             flag = 0;
+            different_cells = 0;
         }else{
             flag++;
         }

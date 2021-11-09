@@ -167,4 +167,3 @@ void BFS(int *inicial,int **tabuleiro,int *dim,int number_of_lines,int value,Coo
     }
 }
 
-
