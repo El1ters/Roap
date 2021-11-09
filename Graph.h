@@ -1,20 +1,29 @@
+/******************************************************************************
+ * NOME
+ *   Graph.h
+ *
+ * DESCRICAO
+ *   Contem os cabecalhos das funcoes utilizadas no Graph.h. e a estrutura do 
+ *   nosso grafo e dos vertices por que e composto.
+ *
+ ******************************************************************************/
 #ifndef GRAPH
 #define GRAPH
 
 typedef struct node{
-    int V; /*o vertice em causa*/
+    int V; /* Vertice em causa. */
     int min;
     struct node *next;
 }Node;
 
 typedef struct graph{  
-    int V; /*nº total de vertices*/
-    int E; /*nº total de arestas*/
-    Node **adj;/*vetor de lista de adjacencias*/
+    int V; /* Numero total de vertices. */
+    int E; /* Numero total de arestas. */
+    Node **adj; /* Vetor de lista de adjacencias. */
 
 }Graph;
 
-/*Declaração de funções*/
+
 Graph* GraphInit(int V);
 void GraphInsertE(Graph *G,int v_inicial,int v_final);
 Node *New(int v,Node *next);

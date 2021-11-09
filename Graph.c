@@ -1,9 +1,34 @@
+/*******************************************************************************************
+ * NOME
+ *   Graph.c
+ *
+ * DESCRICAO
+ *   Contem umas funçoes que permitem criar o nosso grafo (que ira corresponder a
+ *   interligacao das diferentes salas do labirinto atraves de uma lista de adjacencias 
+ *   juntamente com o numero total de arestas e vertices) e outras que ajudam a resolver
+ *   o problema final (saber se e possivel ir de uma celula para a outra e se sim, qual o 
+ *   menor caminho possivel).
+ *
+ *******************************************************************************************/
 #include <stdlib.h>
 #include <stdio.h> 
 #include <string.h>
 #include "Graph.h"
 #include "SolveTab.h"
 
+
+/**********************************************************************************
+ * GraphInit()
+ *
+ * Argumentos: V -> Inteiro correspondente ao numero de vertices do grafo. 
+ * 
+ * Retorna: G -> Ponteiro para o nosso grafo (que corresponde a nossa   lista de
+ *               adjacencias + numero total de vertices + numero total de arestas).
+ *
+ * Descricao: Esta funcao serve para alocar o espaco necessario para o nosso 
+ *            grafo e para inicializar o mesmo. 
+ *               
+ **********************************************************************************/
 Graph* GraphInit(int V){
     int v;
     Graph *G = malloc(sizeof(Graph));
@@ -19,12 +44,43 @@ Graph* GraphInit(int V){
     return G;
 }
 
+
+/*************************************************************************************
+ * GraphInsert()
+ *
+ * Argumentos: G         -> Ponteiro que aponta para o nosso grafo (que corresponde a 
+ *                          nossa lista de adjacencias + numero total de vertices + 
+ *                          numero total de arestas).
+ *             v_inicial -> Inteiro correspondente ao valor de uma sala do nosso 
+ *                          labirinto.
+ *             v_final   -> Inteiro correspondente ao valor de uma sala do nosso
+ *                          labirinto.  
+ * 
+ * Retorna: (void).
+ *
+ * Descricao: Esta funcao permite conetar uma sala adjacente a sua respetiva sala,
+ *            na lista de adjacencias. 
+ *               
+ *************************************************************************************/
 void GraphInsertE(Graph *G,int v_inicial,int v_final){
     G->adj[(v_inicial * -1) - 2] = New(v_final,G->adj[(v_inicial * -1) - 2]);
     G->adj[(v_final *-1) - 2] = New(v_inicial,G->adj[(v_final *-1) - 2]);
     G->E++;
 }
 
+
+/*************************************************************************************
+ * New()
+ *
+ * Argumentos: v    -> Inteiro correspondente ao vertice do nosso no.
+ *             next -> Ponteiro para um no da nossa lista de adjacencias.
+ * 
+ * Retorna: x -> Ponteiro para a cabeca do no da nossa lista de adjacencias.
+ *
+ * Descricao: Esta funcao serve para alocar o espaco necessario para um no 
+ *            da nossa lista de adjacencias e para inicializar o mesmo. 
+ *               
+ *************************************************************************************/
 Node *New(int v,Node *next){
     Node *x;
     if((x = (Node*)malloc(sizeof(Node))) == NULL){
@@ -36,6 +92,25 @@ Node *New(int v,Node *next){
     return x;
 }
 
+
+/*************************************************************************************
+ * Verify()
+ *
+ * Argumentos: G -> Ponteiro que aponta para o nosso grafo (que corresponde a 
+ *                  nossa lista de adjacencias + numero total de vertices + 
+ *                  numero total de arestas).
+ *             v -> Inteiro correspondente ao valor de uma sala do nosso 
+ *                  labirinto.
+ *             w -> Inteiro correspondente ao valor de uma sala do nosso 
+ *                  labirinto.
+ * 
+ * Retorna: 1 -> Se duas salas nao estiverem ligadas.
+ *          0 -> Se duas ja  salas estiverem ligadas.
+ *
+ * Descricao: Esta funcao serve para verificar se, na nossa lista de adjacencias, duas
+ *            salas se encontram interligadas ou nao.
+ *               
+ *************************************************************************************/
 int Verify(Graph *G,int v,int w){
     Node *aux;
         aux = G->adj[(v * -1) - 2];
@@ -47,6 +122,26 @@ int Verify(Graph *G,int v,int w){
     return 1;
 }
 
+
+/*************************************************************************************
+ * ChangeMin()
+ *
+ * Argumentos: G     -> Ponteiro que aponta para o nosso grafo (que corresponde a 
+ *                      nossa lista de adjacencias + numero total de vertices + 
+ *                      numero total de arestas).
+ *             v     -> Inteiro correspondente ao valor de uma sala do nosso 
+ *                      labirinto.
+ *             w     -> Inteiro correspondente ao valor de uma sala do nosso 
+ *                      labirinto.
+ *             value -> Inteiro que vai corresponder ao valor de menor custo entre duas
+ *                      salas adjacentes.
+ * 
+ * Retorna: (void).
+ *
+ * Descricao: Esta funcao serve para ver qual e o caminho de menor custo entre duas 
+ *            salas adjacentes.
+ *               
+ *************************************************************************************/
 void ChangeMin(Graph *G,int v, int w, int value){
     Node *aux;
         aux = G->adj[(v * -1) - 2];
@@ -60,6 +155,24 @@ void ChangeMin(Graph *G,int v, int w, int value){
             aux = aux->next;
         }
 }
+
+
+/**********************************************************************************************
+ * FreeGraph()
+ *
+ * Argumentos: G                -> Ponteiro que aponta para o nosso grafo (que corresponde a 
+ *                                 nossa lista de adjacencias + numero total de vertices + 
+ *                                 numero total de arestas).
+ *             differente_cells -> Inteiro correspondente ao numero de salas diferentes do 
+ *                                 nosso labirinto.
+ *                  
+ * Retorna: (void).
+ *
+ * Descricao: Esta funcao serve para libertar todo o espaco que tinha sido alocado para
+ *            criar o nosso grafo (que corresponde a nossa lista de adjacencias + numero
+ *            total de vertices + numero total de arestas).
+ *               
+ **********************************************************************************************/
 void FreeGraph(Graph *G,int different_cells){
     Node *aux;
     for(int i = 0; i < different_cells; i++){
@@ -73,6 +186,25 @@ void FreeGraph(Graph *G,int different_cells){
     free(G);
 }
 
+
+/**********************************************************************************************
+ * FillBoard()
+ *
+ * Argumentos: tabuleiro        -> Ponteiro para um array de inteiros que contem o
+ *                                 labirinto.
+ *             differente_cells -> Ponteiro para o numero de salas diferentes do 
+ *                                 nosso labirinto.
+ *             dim              -> Ponteiro para a posicao de memoria onde esta a 
+ *                                 dimensao dos labirintos.
+ *             number_of_lines  -> Inteiro correspondente ao numero total de celulas do 
+ *                                 labirinto.
+ *                  
+ * 
+ * Retorna: (void).
+ *
+ * Descricao: Esta funcao serve para dividir o nosso tabuleiro em salas.
+ *    
+ **********************************************************************************************/
 void FillBoard(int **tabuleiro,int *different_cells,int *dim,int number_of_lines){
     Coord *queue = malloc((dim[0] * dim[1] - number_of_lines) * sizeof(queue));
     int sub = -2;
@@ -91,6 +223,25 @@ void FillBoard(int **tabuleiro,int *different_cells,int *dim,int number_of_lines
     free(queue);
 }
 
+
+/************************************************************************************
+ * CreateGraph()
+ *
+ * Argumentos: tabuleiro        -> Ponteiro para um array de inteiros que contem o
+ *                                 labirinto.
+ *             dim              -> Ponteiro para a posicao de memoria onde esta a 
+ *                                 dimensao dos labirintos.
+ *             differente_cells -> Ponteiro para o numero de salas diferentes do 
+ *                                 nosso labirinto.
+ * 
+ * Retorna: G -> Ponteiro que aponta para o nosso grafo (que corresponde a 
+ *               nossa lista de adjacencias + numero total de vertices + 
+ *               numero total de arestas).
+ *
+ * Descricao: Esta funcao permite, atraves de um conjunto de condicoes e chamadas 
+ *            a outras funcoes criadas acima, criar o nosso grafo.
+ *    
+ ************************************************************************************/
 Graph *CreateGraph(int **tabuleiro,int *dim,int different_cells){
     Graph *G = GraphInit(different_cells);
     int room_value[2] = {0,0};

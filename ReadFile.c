@@ -52,13 +52,13 @@ void ReadFile(char **argv){
     int number_of_lines = 1; /* Variavel auxiliar que contem o numero de celulas. */
     int count = 0; /* Variavel auxiliar que conta o numero de coordenadas lidas. */
     int dim[2]; /* Vetor que guarda as dimensoes do labirinto. */
-    int def[2];  /*Vetor que guarda as coordenadas da celula da 2ª linha do ficheiro de entrada. */
+    int def[2];  /* Vetor que guarda as coordenadas da celula da 2ª linha do ficheiro de entrada. */
     int linha; /* Numero de linhas dos labirintos. */
     int coluna; /* Numero de colunas dos labirintos. */
     int cell; /* Variavel auxiliar que vai guardar as celulas dos labirintos. */
-    int no_allocation = 0;
+    int no_allocation = 0; /* Flag que vai permitir saber se devemos ou nao alocar espaco para o nosso labirinto. */
     Graph *G;
-    int different_cells = 0;
+    int different_cells = 0; /* Variavel que vai guardar o numero de salas diferentes do labirinto. */
     
 
     //extensionName(argv); 

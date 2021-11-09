@@ -1,13 +1,15 @@
-/******************************************************************************
+/************************************************************************************
  * NOME
  *   roap.c
  *
  * DESCRICAO
- *   Contem as funcoes que permitem a resolucao do problema pedido (ler dados
- *   do ficheiro de entrada e de acordo com as diferentes formas de
- *   funcionamento escrever a solucao num ficheiro de saida).
+ *   Contem as funçoes que permitem a resolucao do problema intermédio (ler dados
+ *   do ficheiro de entrada e, de acordo com as diferentes formas de funcionamento,
+ *   escrever a solucao num ficheiro de saida) e do problema final (ver se existe
+ *   caminho de uma celula inicial para uma celula final e se sim indicar qual o
+ *   menor caminho).
  *
- ******************************************************************************/
+ ************************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,8 +21,8 @@
 /******************************************************************************
  * main ()
  *
- * Argumentos: argc -> contador do numero de argumentos inseridos no terminal.
- *             argv -> ponteiro que aponta para um vetor de strings que contém 
+ * Argumentos: argc -> Contador do numero de argumentos inseridos no terminal.
+ *             argv -> Ponteiro que aponta para um vetor de strings que contém 
  *                     os argumentos do terminal. 
  * 
  * Retorna: 0 quando o programa termina.

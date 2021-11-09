@@ -3,9 +3,11 @@
  *   SolveTab.c
  *
  * DESCRICAO
- *   Contem a funcao SolveTab que permite resolver o problema inicial, ou seja,
+ *   Contem umas funcoes que permitem resolver o problema inicial (ou seja,
  *   consoante os dados de entrada recebidos irá ser impressa a respetiva
- *   solucao no ficheiro de saida.
+ *   solucao no ficheiro de saida) e outras que contribuiem para a resolucao
+ *   do problema final (BFS que divide o nosso labirinto em salas e Break que 
+ *   verifica se uma dada celula cinzenta pode ou nao ser quebravel).
  *
  ******************************************************************************/
 #include <stdlib.h>
@@ -17,21 +19,21 @@
 
 
 /******************************************************************************
- * SolveTab ()
+ * Break ()
  *
  * Argumentos: tabuleiro -> Um ponteiro para um array de inteiros que contem o
  *                          labirinto.
- *             mode      -> Ponteiro para as variantes de funcionamento.
  *             def       -> Ponteiro para as coordenadas da celula da 2ª linha
  *                          do ficheiro de entrada.
  *             dim       -> Ponteiro para a dimensao dos labirintos.
- *             fp1       -> Ponteiro para o ficheiro de saida onde sao escritas
- *                          as soluçoes ao problema.
  *  
- * Retorna: (void).
+ * Retorna: -1 -> Se as celulas nem se quer forem cinzentas (isto e, se forem
+ *                brancas ou pretas).
+ *           0 -> Se as nossas celulas cinzentas nao sao quebraveis.
+ *           1 -> Se as nossas celulas cinzentas sao quebraveis.
  *
- * Descricao: Esta funcao permite dar resposta ao problema inicial face as
- *            diferentes variantes de funcionamento.
+ * Descricao: Esta funcao serve apenas para indicar as celulas cinzentas que 
+ *            sao quebraveis.
  *     
  *****************************************************************************/
 int Break(int **tabuleiro,int *def,int *dim){
@@ -91,54 +93,50 @@ int Break(int **tabuleiro,int *def,int *dim){
 }     
 
 
-/******************************************************************************
+/****************************************************************************************
  * BFS ()
  *
- * Argumentos: inicial   -> Um ponteiro que aponta para as coordenadas do ponto
- *                          de partida do labirinto. 
- *             final     -> Um ponteiro que aponta para as coordenadas do ponto
- *                          de chegada do labirinto. 
- *             tabuleiro -> Um ponteiro para um array de inteiros que contem o
- *                          labirinto.
- *             dim       -> Ponteiro para a posicao de memoria onde esta a 
- *                          dimensao dos labirintos.
+ * Argumentos: inicial          -> Um ponteiro que aponta para as coordenadas do ponto
+ *                                 de partida do labirinto. 
+ *             tabuleiro        -> Um ponteiro para um array de inteiros que contem o
+ *                                 labirinto.
+ *             dim              -> Ponteiro para a posicao de memoria onde esta a 
+ *                                 dimensao dos labirintos.
+ *             number_of_lines  -> Inteiro correspondente ao numero total de celulas do 
+ *                                 labirinto.
+ *             value            -> Inteiro que vai corresponder ao valor de identificacao 
+ *                                 de uma sala do labirinto
+ *             queue            -> Ponteiro para uma estrutura do tipo Coord que guarda 
+ *                                 coordenadas do labirinto.
  *           
- * Retorna: 1 -> se foi possivel encontrar uma ligacao entre o ponto de partida
- *               e o ponto de chegada.
- *          0 -> se nao foi possivel encontrar uma ligacao entre o ponto de partida
- *               e o ponto de chegada ou se as coordendas correspondentes a estes
- *               pontos sao paredes.
+ * Retorna: (void).
  *
- * Descricao: Esta funcao permite dar resposta a variedade de funcionamento A6.
- *            Esta funcao comeca por colocar num vetor de espera (chamado queue)
- *            a celula correspondente ao ponto de partida do labirinto, verificando
- *            se esta corresponde ou nao a celula do ponto de chegada do labirinto. 
- *            De seguida, se o programa verificar que a celula da queue nao corresponde 
- *            ao conjunto de chegada ira identificar todas as suas celulas adjacentes, 
- *            colocando-as na lista de espera (queue) e movendo a celula em causa para 
- *            um vetor que ira conter todas as celulas que ja foram visitadas.
- *            O programa ira, portanto, executar sucessivamente estas operacoes 
- *            (verificar celula a celula, colocando-as na queue, passando as ja 
- *            verificadas para o vetor de espera, verificando as adjancentes da celula 
- *            que esta em causa) ate chegar a celula correspondente ao ponto de chegada,
- *            se esta exisitir. 
- *     
- *****************************************************************************/
-
-
+ * Descricao: Esta funcao atribui um mesmo inteiro a todas as celulas de uma sala do 
+ *            labirinto.
+ *            Comeca-se por colocar num vetor de espera (chamado queue) a celula
+ *            correspondente ao ponto de partida do labirinto, sendo-lhe atribuido um
+ *            valor inteiro (value). 
+ *            De seguida, o programa ira identificar todas as suas celulas adjacentes
+ *            que pertencem a sua mesma sala, colocando-as na lista de espera (queue)
+ *            para lhes ser atribuido o mesmo valor inteiro.
+ *            Assim todas as celulas pertencentes a uma mesma sala vao possuir o mesmo
+ *            valor, que sera diferente em relacao a celulas de outras salas, obtendo-se,
+ *            assim, a divisao do labirinto em salas. 
+ * 
+ ***************************************************************************************/
 void BFS(int *inicial,int **tabuleiro,int *dim,int number_of_lines,int value,Coord *queue){
     int q_size = 0;  /*Inicializacao do tamanho da fila de espera -> inicialmente ira conter apenas a celula do ponto de partida. */
     Coord current; /* Estrutura que vai guardar as coordendas da celula que esta as ser verificada na queue. */
     Coord start; /* Estrutura que vai guardar as coordendas da celula correspondente ao ponto de partida do labirinto. */
 
     start.x = inicial[0], start.y = inicial[1]; /* Coloca-se na estrutura "start" a celula do ponto de partida. */
-    tabuleiro[start.x][start.y] = value;
+    tabuleiro[start.x][start.y] = value; /* Atribui-se um valor a nossa celula do ponto de partida, valor esse que ira ser igual para 
+                                            todas as celulas da mesma sala. */
 
     queue[q_size++] = start; /* A lista de espera ira conter inicialmente a celula do ponto de partida. */
     
     /*
-    Conjunto de operacoes explicadas no cabecalho da funcao que permitirao saber se ha ou nao ligacao da 
-    celula de partida do labirinto ate a celula de chegada. */
+    Conjunto de operacoes explicadas no cabecalho da funcao que permitirao atribuir o mesmo valor a todas as celulas de uma mesma sala. */
     while(q_size > 0){
         current = queue[--q_size];
         Coord adj; /* Estrutura que vai guardar as coordendas das celulas adjacentes a celula em causa. */
