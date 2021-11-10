@@ -6,7 +6,7 @@
 
 #define p(a) ((a*-1) - 2)
 
-void Dijkstra(Graph *G,int different_cells,int start,int finish){
+void Dijkstra(Graph *G,int different_cells,int start,int finish,FILE *fp1){
     /*fazer alocaçao depois*/
     Queue *head_queue = NULL;
     Queue *current = NULL;
@@ -19,8 +19,8 @@ void Dijkstra(Graph *G,int different_cells,int start,int finish){
         dist[i] = __INT_MAX__;
         st[i] = -1;
         removed[i] = 0;
-        CreateVertice(i,&head_queue);
     }
+    CreateVertice(-2,&head_queue);
     dist[0] = 0;
     while(head_queue != NULL){
         current = PopFirst(&head_queue,dist);
@@ -31,26 +31,56 @@ void Dijkstra(Graph *G,int different_cells,int start,int finish){
               if(removed[p(aux_q->V)] == 0){
                 int temp = dist[p(aux)] + aux_q->min;
                 if(temp < dist[p(aux_q->V)]){
+                    if(st[p(aux_q->V)] == -1){
+                        CreateVertice(aux_q->V,&head_queue);
+                    }
                     dist[p(aux_q->V)] = temp;
-                    st[p(aux_q->V)] = aux;
+                    st[p(aux_q->V)] = aux;                    
                 }
               }               
             }
             
             if(aux == finish){
-                printf("F%d |%d|\n",dist[p(finish)],finish);
-                for(int a = st[p(finish)]; a <= -2; a = st[p(a)])
-                    printf("%d\n",a);
+                int edge = 0;
+                fprintf(fp1,"%d\n",dist[p(finish)]);
+                for(int a = finish;a <= -2;a = st[p(a)]){
+                    removed[edge] = a;
+                    edge++;
+                }
+                edge--;
+                if(dist[p(finish)] != 0)
+                    fprintf(fp1,"%d\n",edge); 
+                for(int b = edge; b >= 0;b--){
+                    Node *aux = NULL;
+                    aux = G->adj[p(removed[b])];
+                    while(aux != NULL){
+                        if(b - 1 >= 0 && aux->V == removed[b - 1]){
+                            fprintf(fp1,"%d %d %d\n",aux->linha,aux->coluna,aux->min);
+                            break;
+                        }
+                        aux = aux->next;
+                    } 
+                }
+                fprintf(fp1,"\n\n"); 
+                free(dist);
+                free(st);
+                free(removed);
+                FreeQueue(&head_queue);
+                return;        
             }
     }
+    
     free(dist);
     free(st);
     free(removed);
+    FreeQueue(&head_queue);
+    fprintf(fp1,"-1\n\n\n");
+
 }
 
 void CreateVertice(int v,Queue **head){
     Queue *V = malloc(sizeof(Queue));
-    V->vertice = p(v);
+    V->vertice = v;
     if(head == NULL){
         *head = V;
     }else{
@@ -95,13 +125,12 @@ Queue *PopFirst(Queue **head,int *dist){
     return current;
 }
 
-void print_queue(Queue* head){
-    Queue *aux = head;
-
-    while(aux != NULL){
-        printf("%d->",aux->vertice);
-        aux = aux->next;
+void FreeQueue(Queue **head){
+    Queue* aux = *head;
+    while(*head != NULL){
+        aux = *head;
+        *head = (*head)->next;
+        free(aux);
     }
-    printf("\n"); 
 }
 

@@ -15,25 +15,6 @@
 #include "Graph.h"
 #include "Dijkstra.h"
 
-void Escrita_dados(Graph *node_list)
-{
-    int  l;
-    int sub = -2;
-    Node *aux;
-    for (l = 0; l < node_list->V; l++)
-    {
-        aux = node_list->adj[l];
-        printf("%d-> ",sub);
-        while (aux != NULL)
-        {
-            printf("%d:%d ", aux->V,aux->min);
-            aux = aux->next;
-        }
-        printf("\n");
-        sub--;
-    }
-}
-
 /******************************************************************************
  * ReadFile ()
  *
@@ -110,7 +91,7 @@ void ReadFile(char **argv){
                 }
                 if(outside(def[0],def[1],dim) == 1){
                     no_allocation = 1;
-                    fprintf(fp1,"-2\n\n");
+                    fprintf(fp1,"-1\n\n\n");
                 }
                 
                 break;
@@ -147,13 +128,12 @@ void ReadFile(char **argv){
             if(no_allocation == 0){
                 FillBoard(tabuleiro,&different_cells,dim,number_of_lines);
                 if(different_cells == 1){
-                    /*tabuleiro resolvido*/
+                    continue;
+                }else{
+                    G = CreateGraph(tabuleiro,dim,different_cells);
+                    Dijkstra(G,different_cells,-2,tabuleiro[def[0] - 1][def[1] - 1],fp1);
+                    FreeGraph(G,different_cells);
                 }
-                //PrintTab(tabuleiro,dim);
-                G = CreateGraph(tabuleiro,dim,different_cells);
-                //Escrita_dados(G);
-                Dijkstra(G,different_cells,-2,tabuleiro[def[0] - 1][def[1] - 1]);
-                FreeGraph(G,different_cells);
                 for(int k = 0;k < dim[0];k++){
                     free(tabuleiro[k]);
                 }    
@@ -292,20 +272,4 @@ void extensionName(char *argv[]){
         exit(0);
     }
     return;
-}
-
-void PrintTab(int **tabuleiro,int *dim){
-    for(int i = 0;i < dim[0];i++){
-        for(int j = 0;j < dim[1];j++){
-            if(tabuleiro[i][j] == -1){
-                printf(" X ");
-            }
-            else if(tabuleiro[i][j] < -1){
-                printf("|%d|",tabuleiro[i][j] * -1);
-            }else{
-                printf(" %d ",tabuleiro[i][j]);
-            }
-        }
-        printf("\n");
-    }
 }

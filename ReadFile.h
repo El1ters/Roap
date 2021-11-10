@@ -14,6 +14,5 @@ int **Allocate(int lines, int columns);
 char *getfilename(char *argv[]);
 int outside(int L,int C,int *dim);
 void extensionName(char *argv[]);
-void PrintTab(int **tabuleiro,int *dim);
 
 #endif

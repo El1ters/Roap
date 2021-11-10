@@ -35,7 +35,6 @@ Graph* GraphInit(int V){
     if(G == NULL)
         exit(0);
     G->V = V;
-    G->E = 0;
     if((G->adj = (Node**)malloc(sizeof(Node*) * V)) == NULL)
         exit(0);
     for(v = 0; v < V;v++)
@@ -62,10 +61,9 @@ Graph* GraphInit(int V){
  *            na lista de adjacencias. 
  *               
  *************************************************************************************/
-void GraphInsertE(Graph *G,int v_inicial,int v_final){
-    G->adj[(v_inicial * -1) - 2] = New(v_final,G->adj[(v_inicial * -1) - 2]);
-    G->adj[(v_final *-1) - 2] = New(v_inicial,G->adj[(v_final *-1) - 2]);
-    G->E++;
+void GraphInsertE(Graph *G,int v_inicial,int v_final,int c,int d){
+    G->adj[(v_inicial * -1) - 2] = New(v_final,G->adj[(v_inicial * -1) - 2],c,d);
+    G->adj[(v_final *-1) - 2] = New(v_inicial,G->adj[(v_final *-1) - 2],c,d);
 }
 
 
@@ -81,13 +79,15 @@ void GraphInsertE(Graph *G,int v_inicial,int v_final){
  *            da nossa lista de adjacencias e para inicializar o mesmo. 
  *               
  *************************************************************************************/
-Node *New(int v,Node *next){
+Node *New(int v,Node *next,int c,int d){
     Node *x;
     if((x = (Node*)malloc(sizeof(Node))) == NULL){
         exit(0);
     }
     x->V = v;
     x->min = __INT_MAX__;
+    x->linha = c + 1;
+    x->coluna = d + 1;
     x->next = next; 
     return x;
 }
@@ -142,13 +142,15 @@ int Verify(Graph *G,int v,int w){
  *            salas adjacentes.
  *               
  *************************************************************************************/
-void ChangeMin(Graph *G,int v, int w, int value){
+void ChangeMin(Graph *G,int v, int w, int value,int line,int column){
     Node *aux;
         aux = G->adj[(v * -1) - 2];
         while(aux != NULL){
             if(aux->V == w){
                 if(value < aux->min){
                     aux->min = value;
+                    aux->linha = line + 1;
+                    aux->coluna = column + 1;
                     return;
                 }    
             }
@@ -260,16 +262,16 @@ Graph *CreateGraph(int **tabuleiro,int *dim,int different_cells){
                                     if(tabuleiro[c + 1][d] == tabuleiro[c - 1][d])
                                         dont_create = 1;
                                     if((G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL) && dont_create == 0){
-                                        GraphInsertE(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d]);   
+                                        GraphInsertE(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d],c,d);   
                                             G->adj[(tabuleiro[c + 1][d] * -1) -2]->min = tabuleiro[c][d];
                                             G->adj[(tabuleiro[c - 1][d] * -1) -2]->min = tabuleiro[c][d];
                                     }else{
                                         if((Verify(G,tabuleiro[c - 1][d],tabuleiro[c + 1][d]) == 1) && dont_create == 0){
-                                            GraphInsertE(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d]);
+                                            GraphInsertE(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d],c,d);
                                             }                 
                                         }
-                                        ChangeMin(G,tabuleiro[c - 1][d],tabuleiro[c + 1][d],tabuleiro[c][d]);
-                                        ChangeMin(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d],tabuleiro[c][d]);
+                                        ChangeMin(G,tabuleiro[c - 1][d],tabuleiro[c + 1][d],tabuleiro[c][d],c,d);
+                                        ChangeMin(G,tabuleiro[c + 1][d],tabuleiro[c - 1][d],tabuleiro[c][d],c,d);
                                     }  
                                 }
                                 dont_create = 0;
@@ -280,16 +282,16 @@ Graph *CreateGraph(int **tabuleiro,int *dim,int different_cells){
                                     if(tabuleiro[c][d + 1] == tabuleiro[c][d - 1])
                                         dont_create = 1;
                                     if((G->adj[(room_value[0] *-1) - 2] == NULL || G->adj[(room_value[1] *-1) - 2] == NULL) && dont_create == 0 ){
-                                        GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);
+                                        GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1],c,d);
                                         G->adj[(tabuleiro[c][d + 1] * -1) -2]->min = tabuleiro[c][d];
                                         G->adj[(tabuleiro[c][d - 1] * -1) -2]->min = tabuleiro[c][d];
                                     }else{
                                         if(Verify(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]) == 1 && dont_create == 0){
-                                            GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1]);
+                                            GraphInsertE(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1],c,d);
                                         }
                                     }
-                                    ChangeMin(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1],tabuleiro[c][d]);
-                                    ChangeMin(G,tabuleiro[c][d - 1],tabuleiro[c][d + 1],tabuleiro[c][d]); 
+                                    ChangeMin(G,tabuleiro[c][d + 1],tabuleiro[c][d - 1],tabuleiro[c][d],c,d);
+                                    ChangeMin(G,tabuleiro[c][d - 1],tabuleiro[c][d + 1],tabuleiro[c][d],c,d);
                                 }
                                 dont_create = 0;
                         }
