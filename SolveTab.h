@@ -3,7 +3,7 @@
  *   SolveTab.h
  *
  * DESCRICAO
- *   Contem os cabecalhos das funcoes utilizadas no SolveTab.h.
+ *   Contem os cabecalhos das funcoes utilizadas no SolveTab.c.
  *
  ******************************************************************************/
 #ifndef SOLVETAB

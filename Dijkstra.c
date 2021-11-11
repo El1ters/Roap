@@ -1,3 +1,12 @@
+/******************************************************************************
+ * NOME
+ *   Dijkstra.c
+ *
+ * DESCRICAO
+ *   Contem as funcoes que permitem encontrar o caminho de menor custo entre o 
+ *   ponto de partida do labirinto e a ponto de chegada.
+ *
+ ******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -6,8 +15,47 @@
 
 #define p(a) ((a*-1) - 2)
 
+
+/*********************************************************************************************************
+ * Dijkstra ()
+ *
+ * Argumentos: G                -> Ponteiro que aponta para o nosso grafo (que corresponde a 
+ *                                 nossa lista de adjacencias + numero total de vertices + 
+ *                                 numero total de arestas).
+ *             differente_cells -> Inteiro correspondente ao numero de salas diferentes do 
+ *                                 nosso labirinto.
+ *             start            -> Inteiro correspondente ao valor da celula de partida do 
+ *                                 labirinto.
+ *             finish           -> Inteiro correspondente ao valor da celula de chegada do 
+ *                                 labirinto.
+ *             fp1              -> Ponteiro para o ficheiro de saida.
+ *
+ * Retorna: (void).
+ *
+ * Descricao: Esta funcao vai encontrar o caminho minimo entre a celula de partida do 
+ *            labirinto e a celula de chegada do mesmo, recorrendo para isso ao algoritmo
+ *            Dijkstra. Este algoritmo comeca por olhar para a celula de partida do labirinto,
+ *            verificando todas as suas celulas adjacentes e adicionando-as a uma lista de espera
+ *            (queue).
+ *            Posteriormente, o algoritmo ira analisar todos os custos para as suas adjacentes 
+ *            avancando para a celula para a qual o custo for menor, verificando as adjacentes para
+ *            essa mesma celula, colocando-as na queue e verificando para qual delas o caminho e de
+ *            menor custo, repetindo assim o processo consecutivamente ate se chegar a celula final.
+ *            Ao longo deste processo, vai-se obtendo, portanto, um conjunto de valores de menores custos
+ *            entre diferentes vertices, valores esses que serao guardados num vetor chamado dist
+ *            que vai sendo atualizado em cada vertice para o valor do caminho de menor custo entre 
+ *            si e a celula inicial.
+ *            E de notar tambem que a medida que os vertices vao sendo verificados vao passar da lista
+ *            de espera (queue) para um vetor chamado removed de modo a que se evite "perder tempo" a 
+ *            verificar o mesmo vertice mais que uma vez.
+ *            Criou-se ao mesmo um vetor chamado st que faz com que nao se perca o rumo ao caminho de
+ *            menor custo total, ou seja, este vetor vai conter para cada vertice o vertice que o precede,
+ *            conseguindo assim a ligacao de menor custo entre a celula final e inicial.  
+ *     
+ *********************************************************************************************************/
 void Dijkstra(Graph *G,int different_cells,int start,int finish,FILE *fp1){
-    /*fazer alocaçao depois*/
+
+  
     Queue *head_queue = NULL;
     Queue *current = NULL;
     Node *aux_q;
@@ -78,6 +126,19 @@ void Dijkstra(Graph *G,int different_cells,int start,int finish,FILE *fp1){
 
 }
 
+
+/**********************************************************************************************
+ * CreateVertice()
+ *
+ * Argumentos: v    -> Inteiro correspondente ao valor numerico que identifica uma sala.
+ *             head -> Ponteiro para um array de estruturas correspondentes aos nos da nossa 
+ *                     lista de espera utilizada no algoritmo Dijkstra.
+ *                  
+ * Retorna: (void).
+ *
+ * Descricao: Esta funcao permite a criacao de um vertice do nosso grafo.
+ *               
+ **********************************************************************************************/
 void CreateVertice(int v,Queue **head){
     Queue *V = malloc(sizeof(Queue));
     V->vertice = v;
@@ -90,7 +151,19 @@ void CreateVertice(int v,Queue **head){
 }
 
 
-
+/**********************************************************************************************
+ * PopFirst()
+ *
+ * Argumentos: head -> Ponteiro para um array de estruturas correspondentes aos nos da nossa 
+ *                     lista de espera utilizada no algoritmo Dijkstra.
+ *             dist -> Ponteiro para um inteiro correspondente ao caminho de menor custo entre
+ *                      dois vertices do nosso grafo (entre duas salas).
+ *                  
+ * Retorna: current ->
+ *
+ * Descricao: 
+ *               
+ **********************************************************************************************/
 Queue *PopFirst(Queue **head,int *dist){
     Queue *current = NULL;
     Queue *auxH = *head;
@@ -125,6 +198,19 @@ Queue *PopFirst(Queue **head,int *dist){
     return current;
 }
 
+
+/**********************************************************************************************
+ * FreeQueue()
+ *
+ * Argumentos: head -> Ponteiro para um array de estruturas correspondentes aos nos da nossa 
+ *                     lista de espera utilizada no algoritmo Dijkstra.
+ *                  
+ * Retorna: (void).
+ *
+ * Descricao: Esta funcao serve para libertar o espaco que tinha sido alocado para a nossa lista
+ *            de espera do algoritmo Dijkstra.
+ *               
+ **********************************************************************************************/
 void FreeQueue(Queue **head){
     Queue* aux = *head;
     while(*head != NULL){

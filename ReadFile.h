@@ -3,7 +3,7 @@
  *   ReadFile.h
  *
  * DESCRICAO
- *   Contem os cabecalhos das funcoes utilizadas no ReadFile.h.
+ *   Contem os cabecalhos das funcoes utilizadas no ReadFile.c.
  *
  ******************************************************************************/
 #ifndef READFILE

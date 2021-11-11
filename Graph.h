@@ -3,13 +3,14 @@
  *   Graph.h
  *
  * DESCRICAO
- *   Contem os cabecalhos das funcoes utilizadas no Graph.h. e a estrutura do 
+ *   Contem os cabecalhos das funcoes utilizadas no Graph.c. e a estrutura do 
  *   nosso grafo e dos vertices por que e composto.
  *
  ******************************************************************************/
 #ifndef GRAPH
 #define GRAPH
 
+/* Estrutura do nosso dos vertices que compoem o nosso grafo. */
 typedef struct node{
     int V; /* Vertice em causa. */
     int min;
@@ -18,6 +19,7 @@ typedef struct node{
     struct node *next;
 }Node;
 
+/* Estrutura do nosso grafo. */
 typedef struct graph{  
     int V; /* Numero total de vertices. */
     Node **adj; /* Vetor de lista de adjacencias. */

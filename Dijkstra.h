@@ -1,3 +1,12 @@
+/********************************************************************************
+ * NOME
+ *   Dijkstra.h
+ *
+ * DESCRICAO
+ *   Contem os cabecalhos das funcoes utilizadas no Dijkstra.c. e a estrutura dos 
+ *   nos da nossa lista de espera utilizada no algoritmo Dijkstra.
+ *
+ ********************************************************************************/
 #ifndef DIJKSTRA
 #define DIJKSTRA
 
@@ -5,6 +14,7 @@
 #include "Graph.h"
 #include "ReadFile.h"
 
+/* Estrutura dos nos da nossa lista de espera utilizada no algoritmo Dijkstra. */
 typedef struct queue
 {
     int vertice;
