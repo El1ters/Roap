@@ -3,11 +3,9 @@
  *   roap.c
  *
  * DESCRICAO
- *   Contem as funçoes que permitem a resolucao do problema intermédio (ler dados
- *   do ficheiro de entrada e, de acordo com as diferentes formas de funcionamento,
- *   escrever a solucao num ficheiro de saida) e do problema final (ver se existe
+ *   Contem as funçoes que permitem a resolucao do problema final (ver se existe
  *   caminho de uma celula inicial para uma celula final e se sim indicar qual o
- *   menor caminho).
+ *   caminho de menor custo).
  *
  ************************************************************************************/
 #include <stdio.h>

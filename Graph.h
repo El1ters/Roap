@@ -14,8 +14,8 @@
 typedef struct node{
     int V; /* Vertice em causa. */
     int min;
-    int linha; /*Linha da parede partida*/
-    int coluna; /*Coluna da parede partida*/
+    int linha; /* Linha da parede partida. */
+    int coluna; /* Coluna da parede partida. */
     struct node *next;
 }Node;
 

@@ -5,9 +5,9 @@
  * DESCRICAO
  *   Contem umas funçoes que permitem criar o nosso grafo (que ira corresponder a
  *   interligacao das diferentes salas do labirinto atraves de uma lista de adjacencias 
- *   juntamente com o numero total de arestas e vertices) e outras que ajudam a resolver
- *   o problema final (saber se e possivel ir de uma celula para a outra e se sim, qual o 
- *   menor caminho possivel).
+ *   juntamente com o numero total de vertices) e outras que ajudam a resolver o problema
+ *   final (saber se e possivel ir de uma celula para a outra e se sim, qual o caminho de
+ *   menor custo possivel).
  *
  *******************************************************************************************/
 #include <stdlib.h>
@@ -23,7 +23,7 @@
  * Argumentos: V -> Inteiro correspondente ao numero de vertices do grafo. 
  * 
  * Retorna: G -> Ponteiro para o nosso grafo (que corresponde a nossa   lista de
- *               adjacencias + numero total de vertices + numero total de arestas).
+ *               adjacencias + numero total de vertices).
  *
  * Descricao: Esta funcao serve para alocar o espaco necessario para o nosso 
  *            grafo e para inicializar o mesmo. 
@@ -48,8 +48,7 @@ Graph* GraphInit(int V){
  * GraphInsert()
  *
  * Argumentos: G         -> Ponteiro que aponta para o nosso grafo (que corresponde a 
- *                          nossa lista de adjacencias + numero total de vertices + 
- *                          numero total de arestas).
+ *                          nossa lista de adjacencias + numero total de vertices).
  *             v_inicial -> Inteiro correspondente ao valor de uma sala do nosso 
  *                          labirinto.
  *             v_final   -> Inteiro correspondente ao valor de uma sala do nosso
@@ -97,8 +96,7 @@ Node *New(int v,Node *next,int c,int d){
  * Verify()
  *
  * Argumentos: G -> Ponteiro que aponta para o nosso grafo (que corresponde a 
- *                  nossa lista de adjacencias + numero total de vertices + 
- *                  numero total de arestas).
+ *                  nossa lista de adjacencias + numero total de vertices).
  *             v -> Inteiro correspondente ao valor de uma sala do nosso 
  *                  labirinto.
  *             w -> Inteiro correspondente ao valor de uma sala do nosso 
@@ -127,8 +125,7 @@ int Verify(Graph *G,int v,int w){
  * ChangeMin()
  *
  * Argumentos: G     -> Ponteiro que aponta para o nosso grafo (que corresponde a 
- *                      nossa lista de adjacencias + numero total de vertices + 
- *                      numero total de arestas).
+ *                      nossa lista de adjacencias + numero total de vertices).
  *             v     -> Inteiro correspondente ao valor de uma sala do nosso 
  *                      labirinto.
  *             w     -> Inteiro correspondente ao valor de uma sala do nosso 
@@ -163,8 +160,7 @@ void ChangeMin(Graph *G,int v, int w, int value,int line,int column){
  * FreeGraph()
  *
  * Argumentos: G                -> Ponteiro que aponta para o nosso grafo (que corresponde a 
- *                                 nossa lista de adjacencias + numero total de vertices + 
- *                                 numero total de arestas).
+ *                                 nossa lista de adjacencias + numero total de vertices).
  *             differente_cells -> Inteiro correspondente ao numero de salas diferentes do 
  *                                 nosso labirinto.
  *                  
@@ -238,8 +234,7 @@ void FillBoard(int **tabuleiro,int *different_cells,int *dim,int number_of_lines
  *                                 nosso labirinto.
  * 
  * Retorna: G -> Ponteiro que aponta para o nosso grafo (que corresponde a 
- *               nossa lista de adjacencias + numero total de vertices + 
- *               numero total de arestas).
+ *               nossa lista de adjacencias + numero total de vertices).
  *
  * Descricao: Esta funcao permite, atraves de um conjunto de condicoes e chamadas 
  *            a outras funcoes criadas acima, criar o nosso grafo.

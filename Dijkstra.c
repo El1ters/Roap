@@ -20,14 +20,11 @@
  * Dijkstra ()
  *
  * Argumentos: G                -> Ponteiro que aponta para o nosso grafo (que corresponde a 
- *                                 nossa lista de adjacencias + numero total de vertices + 
- *                                 numero total de arestas).
+ *                                 nossa lista de adjacencias + numero total de vertices).
  *             differente_cells -> Inteiro correspondente ao numero de salas diferentes do 
  *                                 nosso labirinto.
- *             start            -> Inteiro correspondente ao valor da celula de partida do 
- *                                 labirinto.
- *             finish           -> Inteiro correspondente ao valor da celula de chegada do 
- *                                 labirinto.
+ *             start            -> Inteiro correspondente ao valor da sala.
+ *             finish           -> Inteiro correspondente ao valor da sala.
  *             fp1              -> Ponteiro para o ficheiro de saida.
  *
  * Retorna: (void).
@@ -157,12 +154,23 @@ void CreateVertice(int v,Queue **head){
  * Argumentos: head -> Ponteiro para um array de estruturas correspondentes aos nos da nossa 
  *                     lista de espera utilizada no algoritmo Dijkstra.
  *             dist -> Ponteiro para um inteiro correspondente ao caminho de menor custo entre
- *                      dois vertices do nosso grafo (entre duas salas).
+ *                     dois vertices sendo um deles o vertice inicial do nosso grafo (entre duas
+ *                     salas).
  *                  
- * Retorna: current ->
+ * Retorna: current -> Ponteiro para o vertice (cujo custo entre si e o vertice inicial e minimo)
+ *                     que vai ser retirado da nossa lista de espera (queue).
  *
- * Descricao: 
- *               
+ * Descricao: Esta funcao serve para ver qual e o caminho de menor custo entre um dado vertice e
+ *            o vertice inicial. Para isso vamos ter dois ponteiros a percorrer a nossa queue,
+ *            sendo que no inicio um vai estar a apontar para o primeiro vertice da queue e o
+ *            outro para o vertice imediatamente a seguir da queue. Dizemos que o custo minimo
+ *            corresponde ao custo no primeiro vertice e vamos comparar com o vertice imediatamente
+ *            a seguir para ver qual e o de menor custo alterando o nosso valor de custo minimo se 
+ *            assim for o caso. Antes de passarmos os ponteiros para os proximos vertices da lista
+ *            de espera vamos guardar a referencia (num ponteiro a que chamamos de conect) do vertice
+ *            de menor custo para que no fim se consiga saber qual e o vertice que em relacao ao vertice
+ *            inicial apresenta menor custo, dando-se o retorno desse mesmo vertice.
+ *
  **********************************************************************************************/
 Queue *PopFirst(Queue **head,int *dist){
     Queue *current = NULL;
