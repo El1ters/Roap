@@ -144,14 +144,22 @@ void ReadFile(char **argv){
                     k = 1;
                 }
                 if(k == 0){
+                    int alfa = 0;
                     G = CreateGraph(tabuleiro,dim,different_cells);
-                    Dijkstra(G,different_cells,-2,tabuleiro[def[0] - 1][def[1] - 1],fp1);
-                    FreeGraph(G,different_cells);
-                }
-                for(int k = 0;k < dim[0];k++){
-                    free(tabuleiro[k]);
-                }    
+                    alfa = tabuleiro[def[0] - 1][def[1] - 1];
+                    for(int k = 0;k < dim[0];k++){
+                        free(tabuleiro[k]);
+                    }    
                     free(tabuleiro);
+                    Dijkstra(G,different_cells,-2,alfa,fp1);
+                    FreeGraph(G,different_cells);
+                }else{
+                    for(int k = 0;k < dim[0];k++){
+                        free(tabuleiro[k]);
+                    }    
+                    free(tabuleiro);
+                }
+                
             }
             no_allocation = 0;
             number_of_lines = 1;

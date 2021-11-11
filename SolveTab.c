@@ -53,16 +53,6 @@ int Break(int **tabuleiro,int *def,int *dim){
                return 0;
         }
         
-        /*
-        Verifica, para as celulas encostadas ao lado direito, em cima, em baixo e esquerda do labirinto, 
-        se a celula a esquerda, em baixo, em cima e a direita, respetivamente da celula em causa sao brancas,
-        se sim entao a celula cinzenta e quebravel porque pode haver continuacao do caminho. */
-        if((def[0] - 1 < 0 && tabuleiro[def[0] + 1][def[1]] < -1) ||
-           (def[0] + 1 >= dim[0] && tabuleiro[def[0] - 1][def[1]] < -1) ||
-           (def[1] - 1 < 0 &&  tabuleiro[def[0]][def[1] + 1] < -1) ||
-           (def[1] + 1 >= dim[1] && tabuleiro[def[0]][def[1] - 1] < -1)){
-                return 1;
-            }
 
         /* 
         Verifica, para as restantes celulas do labirinto, se as celulas abaixo e acima
@@ -89,6 +79,18 @@ int Break(int **tabuleiro,int *def,int *dim){
                 return 1;
             }
         }
+
+        /*
+        Verifica, para as celulas encostadas ao lado direito, em cima, em baixo e esquerda do labirinto, 
+        se a celula a esquerda, em baixo, em cima e a direita, respetivamente da celula em causa sao brancas,
+        se sim entao a celula cinzenta e quebravel porque pode haver continuacao do caminho. */
+        if((def[0] - 1 < 0 && tabuleiro[def[0] + 1][def[1]] < -1) ||
+           (def[0] + 1 >= dim[0] && tabuleiro[def[0] - 1][def[1]] < -1) ||
+           (def[1] - 1 < 0 &&  tabuleiro[def[0]][def[1] + 1] < -1) ||
+           (def[1] + 1 >= dim[1] && tabuleiro[def[0]][def[1] - 1] < -1)){
+                return 1;
+            }
+           
         return 0;
 }     
 
