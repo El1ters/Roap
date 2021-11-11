@@ -94,8 +94,7 @@ void ReadFile(char **argv){
                     fprintf(fp1,"-1\n\n\n");
                 }
                 
-                break;Inteiro correspondente ao valor da celula de chegada do 
- *                                 labirinto.
+                break;
             case 3:
                 if(fscanf(fp,"%d",&number_of_lines) != 1){
                     fclose(fp);
@@ -104,18 +103,19 @@ void ReadFile(char **argv){
                     return;
                 }
 
-                if(number_of_lines == 0){alfa
+                if(number_of_lines == 0){
                     no_allocation = 1;
                 }
 
                 if(no_allocation == 0){
                     tabuleiro = Allocate(dim[0],dim[1]);
-                }      
+                } 
+                    
                 break;
             default:
                 if(fscanf(fp,"%d %d %d",&linha,&coluna,&cell) != 3){
                     fclose(fp);
-                    fclose(fp1);alfa
+                    fclose(fp1);
                     free(filename);
                     return;
                 }   
