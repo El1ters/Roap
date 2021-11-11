@@ -208,7 +208,8 @@ void FreeGraph(Graph *G,int different_cells){
  *    
  **********************************************************************************************/
 void FillBoard(int **tabuleiro,int *different_cells,int *dim,int number_of_lines){
-    Coord *queue = malloc((dim[0] * dim[1] - number_of_lines) * sizeof(queue));
+    Coord *queue = malloc((dim[0] * dim[1] - number_of_lines) / 2 * sizeof(queue));
+    /*fazer por lista*/
     int sub = -2;
     int f[2] = {0,0};
     for(int a = 0;a < dim[0];a++){

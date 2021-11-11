@@ -125,11 +125,25 @@ void ReadFile(char **argv){
                 break;
         }
         if(count == number_of_lines){
+            int k = 0;
+            if(number_of_lines == 0){
+                fprintf(fp1,"0\n\n\n");
+            }
+            if(no_allocation == 0 && number_of_lines != 0 && tabuleiro[0][0] != 0 && k == 0){
+                fprintf(fp1,"-1\n\n\n");
+                k = 1;
+            }
+            if(no_allocation == 0 && number_of_lines != 0 && tabuleiro[def[0] - 1][def[1] - 1] != 0 && k == 0){
+                fprintf(fp1,"-1\n\n\n");
+                k = 1;
+            }
             if(no_allocation == 0){
-                FillBoard(tabuleiro,&different_cells,dim,number_of_lines);
+                FillBoard(tabuleiro,&different_cells,dim,number_of_lines);                
                 if(different_cells == 1){
-                    continue;
-                }else{
+                    fprintf(fp1,"0\n\n\n");
+                    k = 1;
+                }
+                if(k == 0){
                     G = CreateGraph(tabuleiro,dim,different_cells);
                     Dijkstra(G,different_cells,-2,tabuleiro[def[0] - 1][def[1] - 1],fp1);
                     FreeGraph(G,different_cells);
